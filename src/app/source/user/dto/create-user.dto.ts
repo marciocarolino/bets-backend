@@ -1,4 +1,11 @@
-import { IsString, IsEmail, IsNotEmpty, IsBoolean, Min } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsNotEmpty,
+  IsBoolean,
+  Min,
+  IsDate,
+} from 'class-validator';
 
 export class CreateUserDTO {
   @IsString()
@@ -16,4 +23,10 @@ export class CreateUserDTO {
 
   @IsBoolean()
   actived!: boolean;
+
+  @IsDate()
+  createdAt!: Date;
+
+  @IsDate()
+  updatedAt!: Date;
 }
