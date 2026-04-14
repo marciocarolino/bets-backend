@@ -10,6 +10,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @ApiResponse({ status: 200, description: 'user found successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async findUserActived(): Promise<CreateUserDTO[]> {
     return this.userService.findUsersActived();
   }
@@ -22,11 +24,13 @@ export class UserController {
   }
 
   @Patch('/update-user')
+  @ApiResponse({ status: 201, description: 'User updated successfully ' })
   async updateUser(@Body() user: UpdateUserDTO): Promise<UpdateUserDTO> {
     return this.userService.updateUser(user);
   }
 
   @Delete('/delete-user')
+  @ApiResponse({ status: 200, description: 'User deleted successfully ' })
   async disableUser(@Body() email: string): Promise<boolean> {
     return this.userService.disableUser(email);
   }
