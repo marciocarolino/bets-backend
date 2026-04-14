@@ -26,7 +26,7 @@ export class UserService {
     };
 
     const saveUser = await this.prisma.user.create({
-      data: { ...createUser, actived: true },
+      data: { ...createUser, createdAt: new Date(), updatedAt: new Date() },
     });
 
     return saveUser;
