@@ -3,6 +3,7 @@ import { PrismaService } from '../../../../prisma/prisma.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ExceptionUtils } from '../../utils/exception.utils';
 import { UpdateUserDTO } from './dto/update-user.dto';
+import { HashPassword } from '../../utils/hashPassword.utils';
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,8 @@ export class UserService {
     if (validateUser) {
       throw new ExceptionUtils('User already exists', HttpStatus.CONFLICT);
     }
+
+    user.password = await HashPassword(user.password);
 
     const createUser = {
       ...user,
