@@ -1,48 +1,38 @@
-import { /*HttpStatus,*/ Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 // import { CreateUserDTO } from './dto/create-user.dto';
-// import { ExceptionUtils } from '../../utils/exception.utils';
+import { ExceptionUtils } from '../../utils/exception.utils';
 // import { UpdateUserDTO } from './dto/update-user.dto';
 // import { HashPassword } from '../../utils/hashPassword.utils';
-// import { isEmailValid } from '../../utils/validateEmail.utils';
+import { isEmailValid } from '../../utils/validateEmail.utils';
 
 // import { UserEntity } from '../../entities/user/user.entity';
 // import { user as UserClient } from '@prisma/client';
 
 import { UserRepository } from '../../repositories/user/user.repository';
 import { UserResponse } from '../../response/user/user-response.dto';
+import { UserMapper } from '../../mapper/user/user.mapper';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findUsersActived(): Promise<UserResponse[]> {
-    const findUserRepository = await this.userRepository.findAll();
+    const listUserRepository = await this.userRepository.findAll();
 
-    const result = findUserRepository.map((r) => {
-      return {
-        name: r.name,
-        email: r.email,
-        actived: r.actived,
-      };
-    });
-
-    return result;
+    return UserMapper.toUserResponseList(listUserRepository);
   }
 
-  // async findUsersEmail(email: string): Promise<string> {
-  //   isEmailValid(email);
+  async findUsersEmail(email: string): Promise<UserResponse> {
+    isEmailValid(email);
 
-  //   const validateEmail = await this.prisma.user.findUnique({
-  //     where: { actived: true, email: email },
-  //     select: { email: true },
-  //   });
+    const user = await this.userRepository.findOne(email);
 
-  //   if (!validateEmail) {
-  //     throw new ExceptionUtils('User Not Found!', HttpStatus.NOT_FOUND);
-  //   }
+    if (!user) {
+      throw new ExceptionUtils('User Not Found!', HttpStatus.NOT_FOUND);
+    }
 
-  //   return validateEmail.email;
-  // }
+    return UserMapper.toUserResponse(user);
+  }
 
   // async findUserForAuth(email: string):Promise<> {
   //   const validUser = await this.prisma.user.findUnique({

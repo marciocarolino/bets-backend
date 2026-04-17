@@ -13,4 +13,12 @@ export class UserRepository {
 
     return result;
   }
+
+  async findOne(email: string): Promise<user | null> {
+    const listUser = await this.prisma.user.findUnique({
+      where: { actived: true, email: email },
+    });
+
+    return listUser;
+  }
 }
