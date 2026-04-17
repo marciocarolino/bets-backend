@@ -1,4 +1,4 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param } from '@nestjs/common';
 // import { CreateUserDTO } from './dto/create-user.dto';
 // import { UpdateUserDTO } from './dto/update-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -15,6 +15,13 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found' })
   async findUserActived(): Promise<UserResponse[]> {
     return this.userService.findUsersActived();
+  }
+
+  @Get(':email')
+  @ApiResponse({ status: 200, description: 'user found successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async listUser(@Param('email') email: string): Promise<UserResponse | null> {
+    return this.userService.findUsersEmail(email);
   }
 
   // @Post('/create-user')
