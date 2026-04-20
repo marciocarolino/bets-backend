@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
-// import { CreateUserDTO } from './dto/create-user.dto';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 // import { UpdateUserDTO } from './dto/update-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserResponse } from '../../response/user/user-response.dto';
 import { UserService } from '../../services/user/user.service';
+import { CreateUserDTO } from '../../dto/user/create-user.dto';
 
 @ApiTags('User')
 @Controller('user')
@@ -14,22 +14,22 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'user found successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findUserActived(): Promise<UserResponse[]> {
-    return this.userService.findUsersActived();
+    return await this.userService.findUsersActived();
   }
 
   @Get(':email')
   @ApiResponse({ status: 200, description: 'user found successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async listUser(@Param('email') email: string): Promise<UserResponse | null> {
-    return this.userService.findUsersEmail(email);
+    return await this.userService.findUserByEmail(email);
   }
 
-  // @Post('/create-user')
-  // @ApiResponse({ status: 201, description: 'User created successfully ' })
-  // @ApiResponse({ status: 409, description: 'User already registered ' })
-  // async createUser(@Body() user: CreateUserDTO): Promise<CreateUserDTO> {
-  //   return this.userService.createUser(user);
-  // }
+  @Post('/create-user')
+  @ApiResponse({ status: 201, description: 'User created successfully ' })
+  @ApiResponse({ status: 409, description: 'User already registered ' })
+  async createUser(@Body() user: CreateUserDTO): Promise<CreateUserDTO> {
+    return await this.userService.createUser(user);
+  }
 
   // @Patch('/update-user')
   // @ApiResponse({ status: 201, description: 'User updated successfully ' })

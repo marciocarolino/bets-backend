@@ -1,8 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-// import { CreateUserDTO } from './dto/create-user.dto';
 import { ExceptionUtils } from '../../utils/exception.utils';
 // import { UpdateUserDTO } from './dto/update-user.dto';
-// import { HashPassword } from '../../utils/hashPassword.utils';
+import { HashPassword } from '../../utils/hashPassword.utils';
 import { isEmailValid } from '../../utils/validateEmail.utils';
 
 // import { UserEntity } from '../../entities/user/user.entity';
@@ -11,21 +10,22 @@ import { isEmailValid } from '../../utils/validateEmail.utils';
 import { UserRepository } from '../../repositories/user/user.repository';
 import { UserResponse } from '../../response/user/user-response.dto';
 import { UserMapper } from '../../mapper/user/user.mapper';
+import { CreateUserDTO } from '../../dto/user/create-user.dto';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findUsersActived(): Promise<UserResponse[]> {
-    const listUserRepository = await this.userRepository.findAll();
+    const users = await this.userRepository.findAll();
 
-    return UserMapper.toUserResponseList(listUserRepository);
+    return UserMapper.toUserResponseList(users);
   }
 
-  async findUsersEmail(email: string): Promise<UserResponse> {
+  async findUserByEmail(email: string): Promise<UserResponse> {
     isEmailValid(email);
 
-    const user = await this.userRepository.findOne(email);
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
       throw new ExceptionUtils('User Not Found!', HttpStatus.NOT_FOUND);
@@ -50,27 +50,23 @@ export class UserService {
   //   return validUser;
   // }
 
-  // async createUser(user: CreateUserDTO): Promise<CreateUserDTO> {
-  //   const validateUser = await this.prisma.user.findUnique({
-  //     where: { email: user.email },
-  //   });
+  async createUser(user: CreateUserDTO): Promise<CreateUserDTO> {
+    const validateEmail = await this.userRepository.findByEmail(user.email);
 
-  //   if (validateUser) {
-  //     throw new ExceptionUtils('User already exists', HttpStatus.CONFLICT);
-  //   }
+    if (validateEmail) {
+      throw new ExceptionUtils('User already exists', HttpStatus.CONFLICT);
+    }
 
-  //   user.password = await HashPassword(user.password);
+    user.password = await HashPassword(user.password);
 
-  //   const createUser = {
-  //     ...user,
-  //   };
+    const createUser = {
+      ...user,
+    };
 
-  //   const saveUser = await this.prisma.user.create({
-  //     data: { ...createUser, createdAt: new Date(), updatedAt: new Date() },
-  //   });
+    const saveUser = await this.userRepository.createUser(createUser);
 
-  //   return saveUser;
-  // }
+    return saveUser;
+  }
 
   // async updateUser(userUpdate: UpdateUserDTO): Promise<UpdateUserDTO> {
   //   if (!userUpdate.email) {

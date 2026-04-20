@@ -1,7 +1,7 @@
-import { user } from '@prisma/client';
+import { UserEntity } from '../../entities/user/user.entity';
 
 export class UserMapper {
-  static toUserResponse(user: user) {
+  static toUserResponse(user: UserEntity) {
     return {
       name: user.name,
       email: user.email,
@@ -9,7 +9,7 @@ export class UserMapper {
     };
   }
 
-  static toUserResponseList(user: user[]) {
+  static toUserResponseList(user: UserEntity[]) {
     const result = user.map((r) => {
       return {
         name: r.name,
