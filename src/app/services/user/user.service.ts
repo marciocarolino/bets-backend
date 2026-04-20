@@ -11,6 +11,7 @@ import { UserRepository } from '../../repositories/user/user.repository';
 import { UserResponse } from '../../response/user/user-response.dto';
 import { UserMapper } from '../../mapper/user/user.mapper';
 import { CreateUserDTO } from '../../dto/user/create-user.dto';
+import { ForAuthUserDTO } from '../../dto/user/forAuth-user.dto';
 
 @Injectable()
 export class UserService {
@@ -34,21 +35,19 @@ export class UserService {
     return UserMapper.toUserResponse(user);
   }
 
-  // async findUserForAuth(email: string):Promise<> {
-  //   const validUser = await this.prisma.user.findUnique({
-  //     where: { actived: true, email: email },
-  //     select: { email: true, password: true },
-  //   });
+  // Chamar no AuthService
+  async findUserForAuth(email: string): Promise<ForAuthUserDTO> {
+    const validateEmail = await this.userRepository.findUserForAuth(email);
 
-  //   if (!validUser) {
-  //     throw new ExceptionUtils(
-  //       'Email or password incorrect',
-  //       HttpStatus.UNAUTHORIZED,
-  //     );
-  //   }
+    if (!validateEmail) {
+      throw new ExceptionUtils(
+        'Email or password incorrect',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
 
-  //   return validUser;
-  // }
+    return validateEmail;
+  }
 
   async createUser(user: CreateUserDTO): Promise<CreateUserDTO> {
     const validateEmail = await this.userRepository.findByEmail(user.email);
