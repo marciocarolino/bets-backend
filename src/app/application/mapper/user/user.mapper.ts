@@ -1,11 +1,11 @@
-import { UserEntity } from '../../entities/user/user.entity';
+import { UserEntity } from '../../../domain/entities/user/user.entity';
 
 export class UserMapper {
-  static toUserResponse(user: UserEntity) {
+  static toUserResponse(users: UserEntity) {
     return {
-      name: user.name,
-      email: user.email,
-      actived: user.actived,
+      name: users.name,
+      email: users.email,
+      active: users.active,
     };
   }
 
@@ -14,7 +14,7 @@ export class UserMapper {
       return {
         name: r.name,
         email: r.email,
-        actived: r.actived,
+        active: r.active,
       };
     });
 
