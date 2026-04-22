@@ -1,9 +1,9 @@
 import { Body, Controller, Get } from '@nestjs/common';
 // import { UpdateUserDTO } from './dto/update-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserResponse } from '../../response/user/user-response.dto';
-import { UserService } from '../../application/services/user/user.service';
-import { UserMapper } from '../../application/mapper/user/user.mapper';
+import { UserService } from '../../../application/services/user/user.service';
+import { UserResponse } from '../../../response/user/user-response.dto';
+import { UserMapper } from '../../../application/mapper/user/user.mapper';
 
 @ApiTags('User')
 @Controller('user')
