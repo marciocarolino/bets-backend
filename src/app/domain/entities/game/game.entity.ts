@@ -12,6 +12,7 @@ export enum GameStatus {
 export class Game extends AggregateRoot {
   public teamAId: Identification;
   public teamBId: Identification;
+  public competitionId: Identification;
 
   private _schedule: MatchSchedule;
   private _status: GameStatus;
@@ -20,6 +21,7 @@ export class Game extends AggregateRoot {
     identification: Identification,
     teamAId: Identification,
     teamBId: Identification,
+    competitionId: Identification,
     schedule: MatchSchedule,
     createdAt: Date,
     updatedAt: Date,
@@ -27,6 +29,7 @@ export class Game extends AggregateRoot {
     super(identification, createdAt, updatedAt);
     this.teamAId = teamAId;
     this.teamBId = teamBId;
+    this.competitionId = competitionId;
     this._schedule = schedule;
   }
 
@@ -60,18 +63,19 @@ export class Game extends AggregateRoot {
     this.markAsUpdated();
   }
 
-  public static create(teamAId: Identification, teamBId: Identification): Game {
-    const identification = new Identification();
-    const createdAt = new Date();
-    const updatedAt = new Date();
-    const schedule = MatchSchedule.createTBD();
+  public static create(
+    teamAId: Identification,
+    teamBId: Identification,
+    competitionId: Identification,
+  ): Game {
     return new Game(
-      identification,
+      new Identification(),
       teamAId,
       teamBId,
-      schedule,
-      createdAt,
-      updatedAt,
+      competitionId,
+      MatchSchedule.createTBD(),
+      new Date(),
+      new Date(),
     );
   }
 }
