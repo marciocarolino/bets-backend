@@ -9,8 +9,8 @@ export class UserMapper {
     };
   }
 
-  static toUserResponseList(user: UserEntity[]) {
-    const result = user.map((r) => {
+  static toUserResponseList(users: UserEntity[]) {
+    const result = users.map((r) => {
       return {
         name: r.name,
         email: r.email,

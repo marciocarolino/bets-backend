@@ -25,8 +25,11 @@ export class PrismaUserRepository implements IUserRepository {
 
     return PrismaUserMapper.toDomain(newData);
   }
-  save(user: UserEntity): Promise<UserEntity> {
+  async save(user: UserEntity): Promise<UserEntity> {
     console.log(user);
-    throw new Error('Method not implemented.');
+    const saveUser = await this.prisma.user.create({
+      data: { ...user },
+    });
+    return PrismaUserMapper.toDomain(saveUser);
   }
 }
