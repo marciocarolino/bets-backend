@@ -36,7 +36,7 @@ export class UserController {
     um tradutor fino entre HTTP e Application
     */
     const createUserInput = CreateUserMapper.toInput(user);
-    const saveUser = await this.userService.save(createUserInput);
+    const saveUser = await this.userService.create(createUserInput);
     return UserMapper.toUserResponse(saveUser);
   }
 

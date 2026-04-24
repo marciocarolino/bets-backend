@@ -22,7 +22,7 @@ export class UserService {
     return await this.userRepository.findByEmail(email);
   }
 
-  async save(user: CreateUserInput): Promise<UserEntity> {
+  async create(user: CreateUserInput): Promise<UserEntity> {
     const verifyEmail = await this.userRepository.findByEmail(user.email);
 
     if (verifyEmail) {
