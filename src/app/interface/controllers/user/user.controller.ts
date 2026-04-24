@@ -5,7 +5,6 @@ import { UserService } from '../../../application/services/user/user.service';
 import { UserResponse } from '../../../response/user/user-response.dto';
 import { UserMapper } from '../../../application/mapper/user/user.mapper';
 import { CreateUserDTO } from '../../../dto/user/create-user.dto';
-import { CreateUserInput } from '../../../application/users/dto-or-input/create-user.input';
 import { CreateUserMapper } from '../../../application/mapper/user/create-user.mapper';
 
 @ApiTags('User')
@@ -25,9 +24,7 @@ export class UserController {
   @ApiResponse({ status: 200, description: 'user found successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async listUser(@Param('email') email: string): Promise<UserResponse | null> {
-    const result = await this.userService.findByEmail(email);
-
-    return UserMapper.toUserResponse(result);
+    return await this.userService.findByEmail(email);
   }
 
   @Post('/create-user')
