@@ -61,3 +61,55 @@ model Game {
   teamB         Team        @relation("teamB", fields: [teamBId], references: [id])
   competition   competition @relation(fields: [competitionId], references: [id])
 }
+
+enum SagaContextStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  COMPENSATING
+  COMPENSATED
+}
+
+model SagaContext {
+  id            String            @id @default(uuid())
+  sagaName      String
+  externalId    String?
+  rawDataHash   String
+  status        SagaContextStatus @default(PENDING)
+  currentStep   Int               @default(0)
+  rawData       Json
+  processData   Json              @default("{}")
+  logs          String[]          @default([])
+  error         String?
+  retryCount    Int               @default(0)
+  version       Int               @default(0)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@unique([sagaName, rawDataHash])
+  @@unique([sagaName, externalId])
+  @@index([status, updatedAt])
+  @@map("saga_contexts")
+}
+
+enum OutboxMessageStatus {
+  PENDING
+  PROCESSED
+  FAILED
+}
+
+model OutboxMessage {
+  id            String              @id @default(uuid())
+  aggregateType String
+  aggregateId   String
+  eventType     String
+  payload       Json
+  status        OutboxMessageStatus @default(PENDING)
+  retryCount    Int                 @default(0)
+  createdAt     DateTime            @default(now())
+  processedAt   DateTime?
+
+  @@index([status, createdAt])
+  @@map("outbox_messages")
+}
