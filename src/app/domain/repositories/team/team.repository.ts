@@ -8,5 +8,4 @@ export interface TeamCriteria {
 
 export interface ITeamRepository extends IRepository<Team> {
   findBy(criteria?: TeamCriteria): Promise<Team[]>;
-  findByAlias(alias: string): Promise<Team | null>;
 }
