@@ -1,4 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
+
 import { ExceptionUtils } from './exception.utils';
 
 export function isEmailValid(email: string) {

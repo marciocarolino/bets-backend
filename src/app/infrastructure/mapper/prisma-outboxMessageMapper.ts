@@ -1,5 +1,6 @@
 import { OutboxMessage as PrismaOutboxMessage, Prisma } from '@prisma/client';
-import { UUID } from 'crypto';
+import type { UUID } from 'crypto';
+
 import { Identification } from '../../domain/base';
 import {
   OutboxMessage,

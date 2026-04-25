@@ -1,8 +1,9 @@
-import { Team as PrismaTeam } from '@prisma/client';
-import { Team } from '../../domain/entities/team/team.entity';
+import type { Team as PrismaTeam } from '@prisma/client';
+import type { UUID } from 'crypto';
+
 import { Identification } from '../../domain/base';
+import { Team } from '../../domain/entities/team/team.entity';
 import { TeamName } from '../../domain/value_objects/teamName.vo';
-import { UUID } from 'crypto';
 
 export class PrismaTeamMapper {
   static toDomain(data: PrismaTeam): Team {

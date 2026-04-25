@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+
+import { PrismaService } from '../../../../prisma/prisma.service';
+import { Team } from '../../domain/entities/team/team.entity';
 import {
   ITeamRepository,
   TeamCriteria,
 } from '../../domain/repositories/team/team.repository';
-import { Team } from '../../domain/entities/team/team.entity';
-import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaTeamMapper } from '../mapper/prisma-teamMapper';
 
 @Injectable()

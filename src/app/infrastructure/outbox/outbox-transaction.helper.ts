@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+
 import { DomainEvent } from '../../domain/repositories/base.repository';
 
 export function outboxOps(

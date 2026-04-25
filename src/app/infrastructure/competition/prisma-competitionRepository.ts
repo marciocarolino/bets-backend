@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+
+import { PrismaService } from '../../../../prisma/prisma.service';
+import { Competition } from '../../domain/entities/competition/competition.entity';
+import { DomainEvent } from '../../domain/repositories/base.repository';
 import {
   CompetitionCriteria,
   ICompetitionRepository,
 } from '../../domain/repositories/competition/competition.repository';
-import { Competition } from '../../domain/entities/competition/competition.entity';
-import { DomainEvent } from '../../domain/repositories/base.repository';
-import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaCompetitionMapper } from '../mapper/prisma-competitionMapper';
 import { outboxOps } from '../outbox/outbox-transaction.helper';
 
