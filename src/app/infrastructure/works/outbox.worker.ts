@@ -21,13 +21,13 @@ import {
 
 const OUTBOX_CHANNEL = 'outbox_channel';
 const MAX_RETRIES = 3;
-const FALLBACK_POLL_MS = 30_000;
+const POLL_INTERVAL_MS = 30_000;
 
 @Injectable()
 export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(OutboxWorker.name);
   private listenClient!: Client;
-  private fallbackTimer?: NodeJS.Timeout;
+  private running = false;
 
   constructor(
     @Inject(OUTBOX_MESSAGE_REPOSITORY)
@@ -38,74 +38,73 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    await this.startListening();
-    this.startFallbackPolling();
-  }
-
-  async onModuleDestroy(): Promise<void> {
-    clearInterval(this.fallbackTimer);
-    await this.listenClient.end();
-  }
-
-  private async startListening(): Promise<void> {
     const connectionString = this.configService.getOrThrow<string>('DATABASE_URL');
     this.listenClient = new Client({ connectionString });
     await this.listenClient.connect();
-    this.listenClient.on('notification', (msg) => {
-      if (msg.channel === OUTBOX_CHANNEL) {
-        void this.processOutboxMessage(msg.payload);
-      }
-    });
     await this.listenClient.query(`LISTEN ${OUTBOX_CHANNEL}`);
+    this.running = true;
+    void this.runLoop();
   }
 
-  private startFallbackPolling(): void {
-    this.fallbackTimer = setInterval(() => {
-      void (async () => {
-        const pendingMessages = await this.outboxRepo.findBy({
-          status: OutboxMessageStatus.PENDING,
-        });
-        for (const message of pendingMessages) {
-          await this.processOutboxMessage(message);
-        }
-      })();
-    }, FALLBACK_POLL_MS);
+  async onModuleDestroy(): Promise<void> {
+    this.running = false;
+    await this.listenClient.end();
   }
 
-  private async processOutboxMessage(
-    input: string | OutboxMessage | undefined,
-  ): Promise<void> {
-    let message: OutboxMessage;
 
-    if (typeof input === 'string') {
-      try {
-        message = JSON.parse(input) as OutboxMessage;
-      } catch (error) {
-        this.logger.error('Failed to parse outbox message payload', error);
-        return;
-      }
-    } else if (input instanceof OutboxMessage) {
-      message = input;
-    } else {
-      this.logger.warn('Received invalid input');
-      return;
+  private async runLoop(): Promise<void> {
+    while (this.running) {
+      await this.waitForNotifyOrTimeout();
+      if (!this.running) break;
+      await this.drainPending();
     }
+  }
 
-    if (message.status !== OutboxMessageStatus.PENDING) {
+  private waitForNotifyOrTimeout(): Promise<void> {
+    return new Promise((resolve) => {
+      const timer = setTimeout(() => {
+        this.listenClient.removeListener('notification', onNotify);
+        this.logger.debug('Poll interval reached — draining pending messages');
+        resolve();
+      }, POLL_INTERVAL_MS);
+
+      const onNotify = (): void => {
+        clearTimeout(timer);
+        this.logger.debug('NOTIFY received — draining pending messages');
+        resolve();
+      };
+
+      this.listenClient.once('notification', onNotify);
+    });
+  }
+
+  private async drainPending(): Promise<void> {
+    const messages = await this.outboxRepo.findBy({
+      status: OutboxMessageStatus.PENDING,
+    });
+
+    for (const message of messages) {
+      await this.processMessage(message);
+    }
+  }
+
+  private async processMessage(message: OutboxMessage): Promise<void> {
+    const fresh = await this.outboxRepo.retrieve(message.identification.id);
+    if (!fresh || fresh.status !== OutboxMessageStatus.PENDING) {
       return;
     }
 
     try {
-      await this.publisher.publish(message);
-      message.markProcessed();
-      await this.outboxRepo.save(message);
+      await this.publisher.publish(fresh);
+      fresh.markProcessed();
+      await this.outboxRepo.save(fresh);
     } catch (error) {
-      this.logger.error('Failed to process outbox message', error);
-      message.incrementRetryCount();
-      if (message.retryCount >= MAX_RETRIES) {
-        message.markFailed();
+      this.logger.error(`Failed to process outbox message ${fresh.identification.id}`, error);
+      fresh.incrementRetryCount();
+      if (fresh.retryCount >= MAX_RETRIES) {
+        fresh.markFailed();
       }
-      await this.outboxRepo.save(message);
+      await this.outboxRepo.save(fresh);
     }
   }
 }
