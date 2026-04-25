@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import {
-  IGameRepository,
-  GameCriteria,
-} from '../../domain/repositories/game/game.repository';
-import { Game } from '../../domain/entities/game/game.entity';
+
 import { PrismaService } from '../../../../prisma/prisma.service';
+import { Game } from '../../domain/entities/game/game.entity';
+import {
+  GameCriteria,
+  IGameRepository,
+} from '../../domain/repositories/game/game.repository';
 import { PrismaGameMapper } from '../mapper/prisma-gameMapper';
 
 @Injectable()

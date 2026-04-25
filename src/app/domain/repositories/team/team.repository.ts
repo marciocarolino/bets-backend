@@ -1,5 +1,5 @@
-import { IRepository } from '../base.repository';
 import { Team } from '../../entities/team/team.entity';
+import { IRepository } from '../base.repository';
 
 export interface TeamCriteria {
   name?: string;

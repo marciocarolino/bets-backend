@@ -1,5 +1,5 @@
-import { IRepository } from '../base.repository';
 import { Competition } from '../../entities/competition/competition.entity';
+import { IRepository } from '../base.repository';
 
 export const COMPETITION_REPOSITORY = 'COMPETITION_REPOSITORY';
 

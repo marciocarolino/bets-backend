@@ -1,9 +1,10 @@
-import type { ICompetitionRepository } from '../../../domain/repositories/competition/competition.repository';
 import { Inject, Injectable } from '@nestjs/common';
-import { Usecase } from '../base.usecase';
-import { COMPETITION_REPOSITORY } from '../../../domain/repositories/competition/competition.repository';
+
 import { Competition } from '../../../domain/entities/competition/competition.entity';
 import { DomainEvent } from '../../../domain/repositories/base.repository';
+import type { ICompetitionRepository } from '../../../domain/repositories/competition/competition.repository';
+import { COMPETITION_REPOSITORY } from '../../../domain/repositories/competition/competition.repository';
+import { Usecase } from '../base.usecase';
 
 export interface Input {
   name: string;

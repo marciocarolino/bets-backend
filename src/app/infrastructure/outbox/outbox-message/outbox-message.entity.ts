@@ -71,6 +71,10 @@ export class OutboxMessage extends Entity {
     this.markAsUpdated();
   }
 
+  public incrementRetryCount(): void {
+    this._retryCount += 1;
+  }
+
   public static create(
     aggregateType: string,
     aggregateId: string,

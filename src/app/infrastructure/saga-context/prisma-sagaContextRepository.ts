@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { SagaContext as SagaContextEntity } from '../../application/saga/saga-context/saga-context.entity';
 import type {
   Criteria,
   ISagaContextRepository,
 } from '../../application/saga/repository/saga-context.repository';
+import { SagaContext as SagaContextEntity } from '../../application/saga/saga-context/saga-context.entity';
 import { PrismaSagaContextMapper } from '../mapper/prisma-sagaContextMapper';
 
 @Injectable()

@@ -1,9 +1,10 @@
-import type { IOutboxMessageRepository } from './outbox.repository';
 import { Injectable } from '@nestjs/common';
+
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaOutboxMessageMapper } from '../mapper/prisma-outboxMessageMapper';
-import { OutboxMessage } from './outbox-message/outbox-message.entity';
+import type { IOutboxMessageRepository } from './outbox.repository';
 import { OutboxCriteria } from './outbox.repository';
+import { OutboxMessage } from './outbox-message/outbox-message.entity';
 
 @Injectable()
 export class PrismaOutboxMessageRepository implements IOutboxMessageRepository {

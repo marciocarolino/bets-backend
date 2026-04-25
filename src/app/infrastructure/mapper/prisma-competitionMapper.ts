@@ -1,7 +1,8 @@
-import { competition as PrismaCompetition } from '@prisma/client';
-import { Competition } from '../../domain/entities/competition/competition.entity';
+import type { competition as PrismaCompetition } from '@prisma/client';
+import type { UUID } from 'crypto';
+
 import { Identification } from '../../domain/base';
-import { UUID } from 'crypto';
+import { Competition } from '../../domain/entities/competition/competition.entity';
 
 export class PrismaCompetitionMapper {
   static toDomain(data: PrismaCompetition): Competition {

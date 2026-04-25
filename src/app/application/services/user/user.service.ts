@@ -1,13 +1,14 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+
+import { UserEntity } from '../../../domain/entities/user/user.entity';
 import type { IUserRepository } from '../../../domain/repositories/user/IUser-repository';
 import { USER_REPOSITORY } from '../../../domain/repositories/user/user-repository.token';
-import { UserEntity } from '../../../domain/entities/user/user.entity';
-import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
 import { ExceptionUtils } from '../../../utils/exception.utils';
-import { hashPassword } from '../../../utils/hashPassword.utils';
-import { FindUserEmailInput } from '../../users/dto-or-input/find-user-email-input';
-import { FindUserDataMapper } from '../../mapper/user/data/find-user-data.mapper';
+import { HashPassword } from '../../../utils/hashPassword.utils';
 import { CreateUserDataMapper } from '../../mapper/user/data/create-user-data.mapper';
+import { FindUserDataMapper } from '../../mapper/user/data/find-user-data.mapper';
+import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
+import { FindUserEmailInput } from '../../users/dto-or-input/find-user-email-input';
 
 @Injectable()
 export class UserService {
@@ -41,7 +42,7 @@ export class UserService {
       throw new ExceptionUtils('User already registered!', HttpStatus.CONFLICT);
     }
 
-    const hashedPassword = await hashPassword(user.password);
+    const hashedPassword = await HashPassword(user.password);
 
     const data = CreateUserDataMapper.toDomainData(user, hashedPassword);
 

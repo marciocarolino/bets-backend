@@ -1,14 +1,15 @@
-import { Game as PrismaGame } from '@prisma/client';
-import { Game } from '../../domain/entities/game/game.entity';
+import type { Game as PrismaGame } from '@prisma/client';
+import type { UUID } from 'crypto';
+
 import { Identification } from '../../domain/base';
+import { Game } from '../../domain/entities/game/game.entity';
 import { MatchSchedule } from '../../domain/value_objects/matchSchedule.vo';
-import { UUID } from 'crypto';
 
 export class PrismaGameMapper {
   static toDomain(data: PrismaGame): Game {
     const schedule = data.isTBD
       ? MatchSchedule.createTBD()
-      : MatchSchedule.create(data.scheduledAt!);
+      : MatchSchedule.create(data.scheduledAt as Date);
 
     return new Game(
       new Identification(data.id as UUID),
