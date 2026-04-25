@@ -1,9 +1,13 @@
-import { Body, Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 // import { UpdateUserDTO } from './dto/update-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../../application/services/user/user.service';
 import { UserResponse } from '../../../response/user/user-response.dto';
 import { UserMapper } from '../../../application/mapper/user/user.mapper';
+import { CreateUserMapper } from '../../../application/mapper/user/create-user.mapper';
+import { CreateUserDTO } from '../../../application/dto/user/create-user.dto';
+import { FindUserEmailDTO } from '../../../application/dto/user/find-user-email.dto';
+import { FindUserEmailDataMapper } from '../../../application/mapper/user/find-user-email.mapper';
 
 @ApiTags('User')
 @Controller('user')
@@ -18,19 +22,29 @@ export class UserController {
     return UserMapper.toUserResponseList(resultt);
   }
 
-  // @Get(':email')
-  // @ApiResponse({ status: 200, description: 'user found successfully' })
-  // @ApiResponse({ status: 404, description: 'User not found' })
-  // async listUser(@Param('email') email: string): Promise<UserResponse | null> {
-  //   return await this.userService.findUserByEmail(email);
-  // }
+  @Get('/:email')
+  @ApiResponse({ status: 200, description: 'user found successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async listUser(@Param() email: FindUserEmailDTO): Promise<UserResponse> {
+    const emailInput = FindUserEmailDataMapper.toInput(email);
 
-  // @Post('/create-user')
-  // @ApiResponse({ status: 201, description: 'User created successfully ' })
-  // @ApiResponse({ status: 409, description: 'User already registered ' })
-  // async createUser(@Body() user: CreateUserDTO): Promise<CreateUserDTO> {
-  //   return await this.userService.createUser(user);
-  // }
+    const findEmail = await this.userService.findByEmail(emailInput);
+
+    return UserMapper.toUserResponse(findEmail);
+  }
+
+  @Post('/create-user')
+  @ApiResponse({ status: 201, description: 'User created successfully ' })
+  @ApiResponse({ status: 409, description: 'User already registered ' })
+  async createUser(@Body() user: CreateUserDTO): Promise<UserResponse> {
+    /*Converter o DTO para o input
+    fazendo com que a service não receba DTO/Swagger nem Validate
+    um tradutor fino entre HTTP e Application
+    */
+    const createUserInput = CreateUserMapper.toInput(user);
+    const saveUser = await this.userService.create(createUserInput);
+    return UserMapper.toUserResponse(saveUser);
+  }
 
   // @Patch('/update-user')
   // @ApiResponse({ status: 201, description: 'User updated successfully ' })

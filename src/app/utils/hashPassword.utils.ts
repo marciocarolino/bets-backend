@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ExceptionUtils } from './exception.utils';
 import * as argon2 from 'argon2';
 
-export async function HashPassword(password: string) {
+export async function hashPassword(password: string) {
   if (!password) {
     throw new ExceptionUtils('Password is required!', HttpStatus.BAD_REQUEST);
   }
