@@ -4,8 +4,10 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserService } from '../../../application/services/user/user.service';
 import { UserResponse } from '../../../response/user/user-response.dto';
 import { UserMapper } from '../../../application/mapper/user/user.mapper';
-import { CreateUserDTO } from '../../../dto/user/create-user.dto';
 import { CreateUserMapper } from '../../../application/mapper/user/create-user.mapper';
+import { CreateUserDTO } from '../../../application/dto/user/create-user.dto';
+import { FindUserEmailDTO } from '../../../application/dto/user/find-user-email.dto';
+import { FindUserEmailDataMapper } from '../../../application/mapper/user/find-user-email.mapper';
 
 @ApiTags('User')
 @Controller('user')
@@ -20,11 +22,15 @@ export class UserController {
     return UserMapper.toUserResponseList(resultt);
   }
 
-  @Get(':email')
+  @Get('/:email')
   @ApiResponse({ status: 200, description: 'user found successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async listUser(@Param('email') email: string): Promise<UserResponse | null> {
-    return await this.userService.findByEmail(email);
+  async listUser(@Param() email: FindUserEmailDTO): Promise<UserResponse> {
+    const emailInput = FindUserEmailDataMapper.toInput(email);
+
+    const findEmail = await this.userService.findByEmail(emailInput);
+
+    return UserMapper.toUserResponse(findEmail);
   }
 
   @Post('/create-user')
