@@ -4,8 +4,10 @@ import {
   ICompetitionRepository,
 } from '../../domain/repositories/competition/competition.repository';
 import { Competition } from '../../domain/entities/competition/competition.entity';
+import { DomainEvent } from '../../domain/repositories/base.repository';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { PrismaCompetitionMapper } from '../mapper/prisma-competitionMapper';
+import { outboxOps } from '../outbox/outbox-transaction.helper';
 
 @Injectable()
 export class PrismaCompetitionRepository implements ICompetitionRepository {
@@ -33,11 +35,12 @@ export class PrismaCompetitionRepository implements ICompetitionRepository {
   }
 
   //TODO: Adicionar try/catch e validar erro de constraint violation.
-  async save(entity: Competition): Promise<Competition> {
-    const data = await this.prisma.competition.upsert({
-      where: {
-        id: entity.identification.id,
-      },
+  async save(
+    entity: Competition,
+    events: DomainEvent[] = [],
+  ): Promise<Competition> {
+    const upsertOp = this.prisma.competition.upsert({
+      where: { id: entity.identification.id },
       update: {
         name: entity.name,
         country: entity.country,
@@ -46,7 +49,13 @@ export class PrismaCompetitionRepository implements ICompetitionRepository {
       },
       create: PrismaCompetitionMapper.toPrisma(entity),
     });
-    return PrismaCompetitionMapper.toDomain(data);
+
+    const [saved] = await this.prisma.$transaction([
+      upsertOp,
+      ...outboxOps(this.prisma, events),
+    ]);
+
+    return PrismaCompetitionMapper.toDomain(saved);
   }
 
   async delete(id: string): Promise<void> {

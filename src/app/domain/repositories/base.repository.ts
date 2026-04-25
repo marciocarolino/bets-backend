@@ -1,5 +1,12 @@
 import { Entity } from '../base';
 
+export interface DomainEvent {
+  readonly eventType: string;
+  readonly aggregateType: string;
+  readonly aggregateId: string;
+  readonly payload: Record<string, unknown>;
+}
+
 export interface IRepository<T extends Entity, ID = string> {
   //When implement this interface, you can specify the type of criteria that will be used to filter
   // the entities. For example, you can create a GameCriteria interface that has properties
@@ -9,7 +16,7 @@ export interface IRepository<T extends Entity, ID = string> {
 
   retrieve(id: ID): Promise<T | null>;
 
-  save(entity: T): Promise<T>;
+  save(entity: T, events?: DomainEvent[]): Promise<T>;
 
   delete(id: ID): Promise<void>;
 }
