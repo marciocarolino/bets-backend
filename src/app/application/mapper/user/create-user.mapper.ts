@@ -2,7 +2,7 @@
 converter CreateUserDTO → CreateUserInput.
 */
 
-import { CreateUserDTO } from '../../dto/user/create-user.dto';
+import { CreateUserDTO } from '../../dto/user/create-user.dto.ts';
 import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
 
 export class CreateUserMapper {
