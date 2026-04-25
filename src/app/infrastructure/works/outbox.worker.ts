@@ -89,22 +89,21 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   }
 
   private async processMessage(message: OutboxMessage): Promise<void> {
-    const fresh = await this.outboxRepo.retrieve(message.identification.id);
-    if (!fresh || fresh.status !== OutboxMessageStatus.PENDING) {
+    if (message.status !== OutboxMessageStatus.PENDING) {
       return;
     }
 
     try {
-      await this.publisher.publish(fresh);
-      fresh.markProcessed();
-      await this.outboxRepo.save(fresh);
+      await this.publisher.publish(message);
+      message.markProcessed();
+      await this.outboxRepo.save(message);
     } catch (error) {
-      this.logger.error(`Failed to process outbox message ${fresh.identification.id}`, error);
-      fresh.incrementRetryCount();
-      if (fresh.retryCount >= MAX_RETRIES) {
-        fresh.markFailed();
+      this.logger.error(`Failed to process outbox message ${message.identification.id}`, error);
+      message.incrementRetryCount();
+      if (message.retryCount >= MAX_RETRIES) {
+        message.markFailed();
       }
-      await this.outboxRepo.save(fresh);
+      await this.outboxRepo.save(message);
     }
   }
 }
