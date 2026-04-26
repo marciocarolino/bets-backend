@@ -7,7 +7,7 @@ export class UpdateUserDTO {
 
   @IsEmail()
   @IsOptional()
-  email?: string;
+  email!: string;
 
   @IsString()
   @IsOptional()

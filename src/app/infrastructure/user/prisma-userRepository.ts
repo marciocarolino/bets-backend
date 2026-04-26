@@ -38,4 +38,8 @@ export class PrismaUserRepository implements IUserRepository {
     });
     return PrismaUserMapper.toDomain(saveUser);
   }
+
+  async update():Promise<any>{
+    return null;
+  }
 }

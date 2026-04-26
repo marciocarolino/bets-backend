@@ -20,4 +20,13 @@ export class UserMapper {
 
     return result;
   }
+
+  static toUpdateUserResponse(users: UserEntity){
+    return {
+      name: users.name,
+      email: users.name,
+      active: users.name,
+      updatedAt: users.updatedAt
+    }
+  }
 }

@@ -8,7 +8,9 @@ import { HashPassword } from '../../../utils/hashPassword.utils';
 import { CreateUserDataMapper } from '../../mapper/user/data/create-user-data.mapper';
 import { FindUserDataMapper } from '../../mapper/user/data/find-user-data.mapper';
 import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
-import { FindUserEmailInput } from '../../users/dto-or-input/find-user-email-input';
+import { UserEmailInput } from '../../users/dto-or-input/user-email-input';
+import { UpdateUserInput } from '../../users/dto-or-input/update-user.input';
+import { UpdateUserDataMapper } from '../../mapper/user/data/update-user-data.mapper';
 
 @Injectable()
 export class UserService {
@@ -21,7 +23,7 @@ export class UserService {
     return this.userRepository.findAll();
   }
 
-  async findByEmail(email: FindUserEmailInput): Promise<UserEntity> {
+  async findByEmail(email: UserEmailInput): Promise<UserEntity> {
     const newEmail = FindUserDataMapper.toDomainData(email);
 
     const findEmail = await this.userRepository.findByEmail(newEmail);
@@ -48,4 +50,21 @@ export class UserService {
 
     return this.userRepository.create(data);
   }
+
+  async update(user: UpdateUserInput):Promise<UserEntity>{
+    //validar email
+   const validateEmail = UpdateUserDataMapper.toDomainData(user);
+
+   const verifyEmail = await this.userRepository.findByEmail(validateEmail);
+
+   if(!verifyEmail){
+    throw new ExceptionUtils('Email not Found!', HttpStatus.NOT_FOUND);
+   }
+
+    //Verificar se a senha foi alterado.
+
+    // retorno do update
+
+  }
+
 }
