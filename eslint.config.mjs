@@ -1,31 +1,32 @@
 // @ts-check
-import { defineConfig } from 'eslint/config';
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import globals from 'globals';
-import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import eslintPluginImport from 'eslint-plugin-import';
-import boundaries from 'eslint-plugin-boundaries';
+import { defineConfig } from "eslint/config";
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended";
+import globals from "globals";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import eslintPluginImport from "eslint-plugin-import";
+import boundaries from "eslint-plugin-boundaries";
 
 export default defineConfig([
+  // 🚫 Ignorar arquivos problemáticos
   {
-    ignores: ["eslint.config.mjs", "dist", "node_modules"]
+    ignores: ["eslint.config.mjs", "dist", "node_modules"],
   },
 
   // Base ESLint
   eslint.configs.recommended,
 
-  // TypeScript (com type-check)
+  // TypeScript com type-check
   ...tseslint.configs.recommendedTypeChecked,
 
   // Prettier
   eslintPluginPrettierRecommended,
 
-  // 🔧 Plugins + base config
+  // 🔧 Plugins
   {
     plugins: {
-      'simple-import-sort': simpleImportSort,
+      "simple-import-sort": simpleImportSort,
       import: eslintPluginImport,
       boundaries: boundaries,
     },
@@ -35,41 +36,52 @@ export default defineConfig([
         ...globals.node,
         ...globals.jest,
       },
-      sourceType: 'commonjs',
+      sourceType: "commonjs",
     },
   },
 
-  // 🔥 Type-check real
+  // 🔥 Type-check real (apenas TS)
   {
-    files: ['**/*.ts'],
+    files: ["**/*.ts"],
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        project: "./tsconfig.json",
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
 
-  // 🧠 Clean Architecture
+  // 🧠 Clean Architecture (ATUALIZADO)
   {
     settings: {
-      'boundaries/elements': [
-        { type: 'domain', pattern: 'src/app/domain/**' },
-        { type: 'application', pattern: 'src/app/application/**' },
-        { type: 'infrastructure', pattern: 'src/app/infrastructure/**' },
-        { type: 'interface', pattern: 'src/app/interface/**' },
+      "boundaries/elements": [
+        { type: "domain", pattern: "src/app/domain/**" },
+        { type: "application", pattern: "src/app/application/**" },
+        { type: "infrastructure", pattern: "src/app/infrastructure/**" },
+        { type: "interface", pattern: "src/app/interface/**" },
       ],
     },
   },
 
-  // 🧪 TESTES
+  // 🧪 TESTES (flexível)
   {
-    files: ['test/**/*.ts', '**/*.spec.ts', '**/*.e2e-spec.ts'],
+    files: ["test/**/*.ts", "**/*.spec.ts", "**/*.e2e-spec.ts"],
     rules: {
-      '@typescript-eslint/no-unsafe-call': 'off',
-      '@typescript-eslint/no-unsafe-member-access': 'off',
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-      '@typescript-eslint/no-unsafe-return': 'off',
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+    },
+  },
+
+  // 🧱 INFRASTRUCTURE (🔥 ESSENCIAL para Prisma)
+  {
+    files: ["src/app/infrastructure/**/*.ts"],
+    rules: {
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
     },
   },
 
@@ -77,33 +89,45 @@ export default defineConfig([
   {
     rules: {
       // TypeScript
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-floating-promises": "warn",
+      "@typescript-eslint/no-unsafe-argument": "warn",
 
-      // 🔥 Prettier (AQUI ESTÁ A MUDANÇA)
-      'prettier/prettier': [
-        'error',
+      // Prettier
+      "prettier/prettier": [
+        "error",
         {
-          endOfLine: 'auto',
+          endOfLine: "auto",
           singleQuote: false,
         },
       ],
 
       // Imports
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
 
-      // Clean Architecture
-      'boundaries/element-types': [
-        'error',
+      // 🔥 Clean Architecture (NOVA REGRA)
+      "boundaries/dependencies": [
+        "error",
         {
-          default: 'disallow',
+          default: "disallow",
           rules: [
-            { from: 'domain', allow: [] },
-            { from: 'application', allow: ['domain'] },
-            { from: 'infrastructure', allow: ['domain', 'application'] },
-            { from: 'interface', allow: ['application'] },
+            {
+              from: "domain",
+              allow: [],
+            },
+            {
+              from: "application",
+              allow: ["domain"],
+            },
+            {
+              from: "infrastructure",
+              allow: ["domain", "application"],
+            },
+            {
+              from: "interface",
+              allow: ["application"],
+            },
           ],
         },
       ],
