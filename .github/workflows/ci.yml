@@ -22,6 +22,10 @@ jobs:
       - name: Install
         run: npm ci
 
+      # ESSENCIAL 
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
       - name: Lint
         run: npm run lint:ci
 
