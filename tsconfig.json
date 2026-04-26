@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": false
   },
 
-  // 🔥 ESSENCIAL
+  // ESSENCIAL
  "include": ["src", "test", "prisma.config.ts"],
 
   // opcional, mas bom
