@@ -1,11 +1,11 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from "@prisma/client";
 
-import { DomainEvent } from '../../domain/repositories/base.repository';
+import { DomainEvent } from "../../domain/repositories/base.repository";
 
 export function outboxOps(
   prisma: Omit<
     PrismaClient,
-    '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+    "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
   >,
   events: DomainEvent[],
 ) {

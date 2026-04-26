@@ -1,10 +1,10 @@
-import { IRepository } from '../../domain/repositories/base.repository';
+import { IRepository } from "../../domain/repositories/base.repository";
 import {
   OutboxMessage,
   OutboxMessageStatus,
-} from './outbox-message/outbox-message.entity';
+} from "./outbox-message/outbox-message.entity";
 
-export const OUTBOX_MESSAGE_REPOSITORY = 'OUTBOX_MESSAGE_REPOSITORY';
+export const OUTBOX_MESSAGE_REPOSITORY = "OUTBOX_MESSAGE_REPOSITORY";
 
 export interface OutboxCriteria {
   status?: OutboxMessageStatus;

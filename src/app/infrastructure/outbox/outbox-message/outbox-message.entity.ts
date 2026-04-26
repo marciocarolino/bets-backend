@@ -1,9 +1,9 @@
-import { Entity, Identification } from '../../../domain/base';
+import { Entity, Identification } from "../../../domain/base";
 
 export enum OutboxMessageStatus {
-  PENDING = 'PENDING',
-  PROCESSED = 'PROCESSED',
-  FAILED = 'FAILED',
+  PENDING = "PENDING",
+  PROCESSED = "PROCESSED",
+  FAILED = "FAILED",
 }
 
 export class OutboxMessage extends Entity {

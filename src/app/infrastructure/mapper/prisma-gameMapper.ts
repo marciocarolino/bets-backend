@@ -1,9 +1,9 @@
-import type { Game as PrismaGame } from '@prisma/client';
-import type { UUID } from 'crypto';
+import type { Game as PrismaGame } from "@prisma/client";
+import type { UUID } from "crypto";
 
-import { Identification } from '../../domain/base';
-import { Game } from '../../domain/entities/game/game.entity';
-import { MatchSchedule } from '../../domain/value_objects/matchSchedule.vo';
+import { Identification } from "../../domain/base";
+import { Game } from "../../domain/entities/game/game.entity";
+import { MatchSchedule } from "../../domain/value_objects/matchSchedule.vo";
 
 export class PrismaGameMapper {
   static toDomain(data: PrismaGame): Game {
@@ -22,7 +22,7 @@ export class PrismaGameMapper {
     );
   }
 
-  static toPrisma(entity: Game): Omit<PrismaGame, 'createdAt'> {
+  static toPrisma(entity: Game): Omit<PrismaGame, "createdAt"> {
     return {
       id: entity.identification.id,
       teamAId: entity.teamAId.id,

@@ -1,14 +1,14 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 
-import { UserEntity } from '../../../domain/entities/user/user.entity';
-import type { IUserRepository } from '../../../domain/repositories/user/IUser-repository';
-import { USER_REPOSITORY } from '../../../domain/repositories/user/user-repository.token';
-import { ExceptionUtils } from '../../../utils/exception.utils';
-import { HashPassword } from '../../../utils/hashPassword.utils';
-import { CreateUserDataMapper } from '../../mapper/user/data/create-user-data.mapper';
-import { FindUserDataMapper } from '../../mapper/user/data/find-user-data.mapper';
-import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
-import { FindUserEmailInput } from '../../users/dto-or-input/find-user-email-input';
+import { UserEntity } from "../../../domain/entities/user/user.entity";
+import type { IUserRepository } from "../../../domain/repositories/user/IUser-repository";
+import { USER_REPOSITORY } from "../../../domain/repositories/user/user-repository.token";
+import { ExceptionUtils } from "../../../utils/exception.utils";
+import { HashPassword } from "../../../utils/hashPassword.utils";
+import { CreateUserDataMapper } from "../../mapper/user/data/create-user-data.mapper";
+import { FindUserDataMapper } from "../../mapper/user/data/find-user-data.mapper";
+import { CreateUserInput } from "../../users/dto-or-input/create-user.input";
+import { FindUserEmailInput } from "../../users/dto-or-input/find-user-email-input";
 
 @Injectable()
 export class UserService {
@@ -27,7 +27,7 @@ export class UserService {
     const findEmail = await this.userRepository.findByEmail(newEmail);
 
     if (!findEmail) {
-      throw new ExceptionUtils('User Not Found!', HttpStatus.NOT_FOUND);
+      throw new ExceptionUtils("User Not Found!", HttpStatus.NOT_FOUND);
     }
 
     return findEmail;
@@ -39,7 +39,7 @@ export class UserService {
     const verifyEmail = await this.userRepository.findByEmail(newEmail);
 
     if (verifyEmail) {
-      throw new ExceptionUtils('User already registered!', HttpStatus.CONFLICT);
+      throw new ExceptionUtils("User already registered!", HttpStatus.CONFLICT);
     }
 
     const hashedPassword = await HashPassword(user.password);

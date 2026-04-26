@@ -1,12 +1,12 @@
-import { AggregateRoot, Identification } from '../../../domain/base';
+import { AggregateRoot, Identification } from "../../../domain/base";
 
 export enum SagaContextStatus {
-  PENDING = 'PENDING',
-  RUNNING = 'RUNNING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
-  COMPENSATING = 'COMPENSATING',
-  COMPENSATED = 'COMPENSATED',
+  PENDING = "PENDING",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  COMPENSATING = "COMPENSATING",
+  COMPENSATED = "COMPENSATED",
 }
 
 export interface SagaContextProps {

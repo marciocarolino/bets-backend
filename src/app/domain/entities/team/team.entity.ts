@@ -1,5 +1,5 @@
-import { AggregateRoot, Identification } from '../../base';
-import { TeamName } from '../../value_objects/teamName.vo';
+import { AggregateRoot, Identification } from "../../base";
+import { TeamName } from "../../value_objects/teamName.vo";
 
 export class Team extends AggregateRoot {
   private _teamName: TeamName;

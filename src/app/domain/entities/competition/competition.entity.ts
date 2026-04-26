@@ -1,4 +1,4 @@
-import { AggregateRoot, Identification } from '../../base';
+import { AggregateRoot, Identification } from "../../base";
 
 export class Competition extends AggregateRoot {
   public readonly slug: string;
