@@ -38,7 +38,8 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   async onModuleInit(): Promise<void> {
-    const connectionString = this.configService.getOrThrow<string>('DATABASE_URL');
+    const connectionString =
+      this.configService.getOrThrow<string>('DATABASE_URL');
     this.listenClient = new Client({ connectionString });
     await this.listenClient.connect();
     await this.listenClient.query(`LISTEN ${OUTBOX_CHANNEL}`);
@@ -50,7 +51,6 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
     this.running = false;
     await this.listenClient.end();
   }
-
 
   private async runLoop(): Promise<void> {
     while (this.running) {
@@ -98,7 +98,10 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
       message.markProcessed();
       await this.outboxRepo.save(message);
     } catch (error) {
-      this.logger.error(`Failed to process outbox message ${message.identification.id}`, error);
+      this.logger.error(
+        `Failed to process outbox message ${message.identification.id}`,
+        error,
+      );
       message.incrementRetryCount();
       if (message.retryCount >= MAX_RETRIES) {
         message.markFailed();
