@@ -6,8 +6,8 @@ export class PrismaUserMapper {
   static toDomain(data: PrismaUser) {
     return new UserEntity(
       data.id,
-      data.name,
       data.email,
+      data.name,
       data.password,
       data.active,
       data.createdAt,
@@ -21,8 +21,8 @@ export class PrismaUserMapper {
     for (const newData of data) {
       const entity = new UserEntity(
         newData.id,
-        newData.name,
         newData.email,
+        newData.name,
         newData.password,
         newData.active,
         newData.createdAt,

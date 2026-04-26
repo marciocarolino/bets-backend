@@ -8,12 +8,13 @@ import { CreateUserMapper } from '../../../application/mapper/user/create-user.m
 import { UserEmailDataMapper } from '../../../application/mapper/user/user-email.mapper';
 
 import { CreateUserDTO } from '../../../application/dto/user/create-user.dto';
-import { UpdateUserDTO } from './dto/update-user.dto';
+import { UpdateUserDTO } from '../../../application/dto/user/update-user.dto';
 import { UserEmailDTO } from '../../../application/dto/user/user-email.dto';
 
 import { UserResponse } from '../../../response/user/user-response.dto';
 import { UserUpdateResponse } from '../../../response/user/user-update-response.dto';
 import { UpdateUserDataMapper } from '../../../application/mapper/user/update-user-.mapper';
+
 
 
 @ApiTags('User')

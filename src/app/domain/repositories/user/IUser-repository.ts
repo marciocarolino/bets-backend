@@ -10,5 +10,5 @@ export interface IUserRepository {
 
   create(user: CreateUserData): Promise<UserEntity>;
 
-  update(user:  UpdateUserData): Promise<UserEntity>;
+  update(user:  UserEntity): Promise<UserEntity>;
 }

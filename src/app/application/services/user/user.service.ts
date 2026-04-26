@@ -11,6 +11,7 @@ import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
 import { UserEmailInput } from '../../users/dto-or-input/user-email-input';
 import { UpdateUserInput } from '../../users/dto-or-input/update-user.input';
 import { UpdateUserDataMapper } from '../../mapper/user/data/update-user-data.mapper';
+import { comparePassword } from '../../../utils/comparePassword.util';
 
 @Injectable()
 export class UserService {
@@ -55,15 +56,34 @@ export class UserService {
     //validar email
    const validateEmail = UpdateUserDataMapper.toDomainData(user);
 
-   const verifyEmail = await this.userRepository.findByEmail(validateEmail);
+   const existingUser  = await this.userRepository.findByEmail(validateEmail);
 
-   if(!verifyEmail){
+   if(!existingUser ){
     throw new ExceptionUtils('Email not Found!', HttpStatus.NOT_FOUND);
    }
 
-    //Verificar se a senha foi alterado.
+   let hashedPassword: string | undefined;
 
-    // retorno do update
+   if(user.password){
+
+    const isSamePassword = await comparePassword(
+      user.password,
+      existingUser.password
+    )
+
+    if(!isSamePassword){    
+    hashedPassword = await HashPassword(user.password);
+    } 
+  }
+
+   existingUser.update({
+    name: user.name,
+    email: user.email,
+    password: hashedPassword 
+   });
+
+   return this.userRepository.update(existingUser);
+
 
   }
 

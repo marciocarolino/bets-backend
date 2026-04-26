@@ -42,24 +42,24 @@ model Team {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  homeGames Game[]   @relation("teamA")
-  awayGames Game[]   @relation("teamB")
+  homeGames Game[] @relation("teamA")
+  awayGames Game[] @relation("teamB")
 }
 
 model Game {
-  id            String      @id @default(uuid())
+  id            String    @id @default(uuid())
   teamAId       String
   teamBId       String
   competitionId String
   scheduledAt   DateTime?
-  isTBD         Boolean     @default(true)
-  status        String      @default("UNDEFINED")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  isTBD         Boolean   @default(true)
+  status        String    @default("UNDEFINED")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
-  teamA         Team        @relation("teamA", fields: [teamAId], references: [id])
-  teamB         Team        @relation("teamB", fields: [teamBId], references: [id])
-  competition   competition @relation(fields: [competitionId], references: [id])
+  teamA       Team        @relation("teamA", fields: [teamAId], references: [id])
+  teamB       Team        @relation("teamB", fields: [teamBId], references: [id])
+  competition competition @relation(fields: [competitionId], references: [id])
 }
 
 enum SagaContextStatus {
@@ -72,20 +72,20 @@ enum SagaContextStatus {
 }
 
 model SagaContext {
-  id            String            @id @default(uuid())
-  sagaName      String
-  externalId    String?
-  rawDataHash   String
-  status        SagaContextStatus @default(PENDING)
-  currentStep   Int               @default(0)
-  rawData       Json
-  processData   Json              @default("{}")
-  logs          String[]          @default([])
-  error         String?
-  retryCount    Int               @default(0)
-  version       Int               @default(0)
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  id          String            @id @default(uuid())
+  sagaName    String
+  externalId  String?
+  rawDataHash String
+  status      SagaContextStatus @default(PENDING)
+  currentStep Int               @default(0)
+  rawData     Json
+  processData Json              @default("{}")
+  logs        String[]          @default([])
+  error       String?
+  retryCount  Int               @default(0)
+  version     Int               @default(0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 
   @@unique([sagaName, rawDataHash])
   @@unique([sagaName, externalId])

@@ -3,8 +3,8 @@ import { UserEntity } from '../../../domain/entities/user/user.entity';
 export class UserMapper {
   static toUserResponse(users: UserEntity) {
     return {
-      name: users.name,
       email: users.email,
+      name: users.name,
       active: users.active,
     };
   }
@@ -12,8 +12,8 @@ export class UserMapper {
   static toUserResponseList(users: UserEntity[]) {
     const result = users.map((r) => {
       return {
-        name: r.name,
         email: r.email,
+        name: r.name,
         active: r.active,
       };
     });
@@ -23,9 +23,9 @@ export class UserMapper {
 
   static toUpdateUserResponse(users: UserEntity){
     return {
+      email: users.email,
       name: users.name,
-      email: users.name,
-      active: users.name,
+      active: users.active,
       updatedAt: users.updatedAt
     }
   }
