@@ -40,7 +40,7 @@ export default defineConfig([
     },
   },
 
-  // 🔥 Type-check real (apenas TS)
+  // 🔥 Type-check real
   {
     files: ["**/*.ts"],
     languageOptions: {
@@ -51,7 +51,7 @@ export default defineConfig([
     },
   },
 
-  // 🧠 Clean Architecture (ATUALIZADO)
+  // 🧠 Clean Architecture (camadas)
   {
     settings: {
       "boundaries/elements": [
@@ -63,18 +63,24 @@ export default defineConfig([
     },
   },
 
-  // 🧪 TESTES (flexível)
+  // 🧪 TESTES + Prisma (flexível)
   {
-    files: ["test/**/*.ts", "**/*.spec.ts", "**/*.e2e-spec.ts"],
+    files: [
+      "test/**/*.ts",
+      "**/*.spec.ts",
+      "**/*.e2e-spec.ts",
+      "prisma/prisma.service.ts",
+    ],
     rules: {
       "@typescript-eslint/no-unsafe-call": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/no-unsafe-return": "off",
     },
   },
 
-  // 🧱 INFRASTRUCTURE (🔥 ESSENCIAL para Prisma)
+  // 🧱 INFRA (Prisma, DB, etc.)
   {
     files: ["src/app/infrastructure/**/*.ts"],
     rules: {
@@ -106,7 +112,7 @@ export default defineConfig([
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
 
-      // 🔥 Clean Architecture (NOVA REGRA)
+      // 🔥 Clean Architecture (compatível com sua versão)
       "boundaries/dependencies": [
         "error",
         {
