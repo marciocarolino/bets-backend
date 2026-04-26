@@ -5,6 +5,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import eslintPluginImport from 'eslint-plugin-import';
+import boundaries from 'eslint-plugin-boundaries';
 
 export default tseslint.config(
   {
@@ -16,7 +17,7 @@ export default tseslint.config(
   {
     plugins: {
       'simple-import-sort': simpleImportSort,
-      import: eslintPluginImport,
+      import: eslintPluginImport, boundaries
     },
     languageOptions: {
       globals: {
@@ -29,6 +30,14 @@ export default tseslint.config(
         tsconfigRootDir: import.meta.dirname,
       },
     },
+    settings:{
+      'boundaries/elements':[
+        {type: 'domain', pattern:'src/app/domain/**'},
+        { type: 'application', pattern: 'src/app/application/**' },
+        { type: 'infrastructure', pattern: 'src/app/infrastructure/**' },
+        { type: 'interface', pattern: 'src/app/interface/**' },
+      ]
+    }
   },
   {
     rules: {
@@ -38,6 +47,30 @@ export default tseslint.config(
       "prettier/prettier": ["error", { endOfLine: "auto" }],
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+      'boundaries/element-types': [
+    'error',
+    {
+      default: 'disallow',
+      rules: [
+        {
+          from: 'domain',
+          allow: [],
+        },
+        {
+          from: 'application',
+          allow: ['domain'],
+        },
+        {
+          from: 'infrastructure',
+          allow: ['domain', 'application'],
+        },
+        {
+          from: 'interface',
+          allow: ['application'],
+        },
+      ],
+    },
+  ],
     },
   },
 );
