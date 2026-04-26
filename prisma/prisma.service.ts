@@ -1,7 +1,7 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
+import { Injectable, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaClient } from "@prisma/client";
+import { Pool } from "pg";
 
 @Injectable()
 export class PrismaService
@@ -14,7 +14,7 @@ export class PrismaService
     const connectionString = process.env.DATABASE_URL;
 
     if (!connectionString) {
-      throw new Error('DATABASE_URL is not defined');
+      throw new Error("DATABASE_URL is not defined");
     }
 
     const pool = new Pool({ connectionString });
@@ -29,7 +29,7 @@ export class PrismaService
     try {
       await this.$connect();
     } catch (error) {
-      console.error('Prisma connection error:', error);
+      console.error("Prisma connection error:", error);
       throw error;
     }
   }

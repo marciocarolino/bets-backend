@@ -1,5 +1,5 @@
-import { Game } from '../../entities/game/game.entity';
-import { IRepository } from '../base.repository';
+import { Game } from "../../entities/game/game.entity";
+import { IRepository } from "../base.repository";
 
 export interface GameCriteria {
   teamAId?: string;

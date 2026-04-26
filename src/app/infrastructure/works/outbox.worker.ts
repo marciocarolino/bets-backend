@@ -4,22 +4,22 @@ import {
   Logger,
   OnModuleDestroy,
   OnModuleInit,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Client } from 'pg';
+} from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
+import { Client } from "pg";
 
-import type { EventPublisher } from '../../application/events/event-publisher.interface';
-import { EVENT_PUBLISHER } from '../../application/events/event-publisher.interface';
+import type { EventPublisher } from "../../application/events/event-publisher.interface";
+import { EVENT_PUBLISHER } from "../../application/events/event-publisher.interface";
 import {
   type IOutboxMessageRepository,
   OUTBOX_MESSAGE_REPOSITORY,
-} from '../outbox/outbox.repository';
+} from "../outbox/outbox.repository";
 import {
   OutboxMessage,
   OutboxMessageStatus,
-} from '../outbox/outbox-message/outbox-message.entity';
+} from "../outbox/outbox-message/outbox-message.entity";
 
-const OUTBOX_CHANNEL = 'outbox_channel';
+const OUTBOX_CHANNEL = "outbox_channel";
 const MAX_RETRIES = 3;
 const POLL_INTERVAL_MS = 30_000;
 
@@ -39,7 +39,7 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit(): Promise<void> {
     const connectionString =
-      this.configService.getOrThrow<string>('DATABASE_URL');
+      this.configService.getOrThrow<string>("DATABASE_URL");
     this.listenClient = new Client({ connectionString });
     await this.listenClient.connect();
     await this.listenClient.query(`LISTEN ${OUTBOX_CHANNEL}`);
@@ -63,18 +63,18 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
   private waitForNotifyOrTimeout(): Promise<void> {
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
-        this.listenClient.removeListener('notification', onNotify);
-        this.logger.debug('Poll interval reached — draining pending messages');
+        this.listenClient.removeListener("notification", onNotify);
+        this.logger.debug("Poll interval reached — draining pending messages");
         resolve();
       }, POLL_INTERVAL_MS);
 
       const onNotify = (): void => {
         clearTimeout(timer);
-        this.logger.debug('NOTIFY received — draining pending messages');
+        this.logger.debug("NOTIFY received — draining pending messages");
         resolve();
       };
 
-      this.listenClient.once('notification', onNotify);
+      this.listenClient.once("notification", onNotify);
     });
   }
 

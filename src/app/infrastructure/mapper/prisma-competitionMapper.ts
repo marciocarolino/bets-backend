@@ -1,8 +1,8 @@
-import type { competition as PrismaCompetition } from '@prisma/client';
-import type { UUID } from 'crypto';
+import type { competition as PrismaCompetition } from "@prisma/client";
+import type { UUID } from "crypto";
 
-import { Identification } from '../../domain/base';
-import { Competition } from '../../domain/entities/competition/competition.entity';
+import { Identification } from "../../domain/base";
+import { Competition } from "../../domain/entities/competition/competition.entity";
 
 export class PrismaCompetitionMapper {
   static toDomain(data: PrismaCompetition): Competition {
@@ -17,7 +17,7 @@ export class PrismaCompetitionMapper {
     );
   }
 
-  static toPrisma(entity: Competition): Omit<PrismaCompetition, 'createdAt'> {
+  static toPrisma(entity: Competition): Omit<PrismaCompetition, "createdAt"> {
     return {
       id: entity.identification.id,
       name: entity.name,

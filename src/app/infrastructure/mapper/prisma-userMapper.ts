@@ -1,6 +1,6 @@
-import { user as PrismaUser } from '@prisma/client';
+import { user as PrismaUser } from "@prisma/client";
 
-import { UserEntity } from '../../domain/entities/user/user.entity';
+import { UserEntity } from "../../domain/entities/user/user.entity";
 
 export class PrismaUserMapper {
   static toDomain(data: PrismaUser): UserEntity {

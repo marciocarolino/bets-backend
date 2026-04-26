@@ -10,7 +10,7 @@ import boundaries from 'eslint-plugin-boundaries';
 
 export default defineConfig([
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ["eslint.config.mjs", "dist", "node_modules"]
   },
 
   // Base ESLint
@@ -39,7 +39,7 @@ export default defineConfig([
     },
   },
 
-  // 🔥 Type-check real (ESSENCIAL)
+  // 🔥 Type-check real
   {
     files: ['**/*.ts'],
     languageOptions: {
@@ -50,7 +50,7 @@ export default defineConfig([
     },
   },
 
-  // 🧠 Clean Architecture (boundaries)
+  // 🧠 Clean Architecture
   {
     settings: {
       'boundaries/elements': [
@@ -62,7 +62,7 @@ export default defineConfig([
     },
   },
 
-  // 🧪 TESTES (flexibiliza regras unsafe)
+  // 🧪 TESTES
   {
     files: ['test/**/*.ts', '**/*.spec.ts', '**/*.e2e-spec.ts'],
     rules: {
@@ -81,35 +81,29 @@ export default defineConfig([
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
 
-      // Prettier
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      // 🔥 Prettier (AQUI ESTÁ A MUDANÇA)
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto',
+          singleQuote: false,
+        },
+      ],
 
       // Imports
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
 
-      // 🔥 Clean Architecture enforcement
+      // Clean Architecture
       'boundaries/element-types': [
         'error',
         {
           default: 'disallow',
           rules: [
-            {
-              from: 'domain',
-              allow: [],
-            },
-            {
-              from: 'application',
-              allow: ['domain'],
-            },
-            {
-              from: 'infrastructure',
-              allow: ['domain', 'application'],
-            },
-            {
-              from: 'interface',
-              allow: ['application'],
-            },
+            { from: 'domain', allow: [] },
+            { from: 'application', allow: ['domain'] },
+            { from: 'infrastructure', allow: ['domain', 'application'] },
+            { from: 'interface', allow: ['application'] },
           ],
         },
       ],

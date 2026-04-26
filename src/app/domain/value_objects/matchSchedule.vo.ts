@@ -1,4 +1,4 @@
-import { ValueObject } from '../base';
+import { ValueObject } from "../base";
 
 interface MatchScheduleProps {
   dateTime?: Date;
@@ -14,7 +14,7 @@ export class MatchSchedule extends ValueObject<MatchScheduleProps> {
     if (dateTime < new Date()) {
       //TODO : Criar uma exception personalizada para isso
       throw new Error(
-        'Not possible to create a match schedule with a past date and time.',
+        "Not possible to create a match schedule with a past date and time.",
       );
     }
     return new MatchSchedule({ dateTime, isTBD: false });
@@ -24,7 +24,7 @@ export class MatchSchedule extends ValueObject<MatchScheduleProps> {
     if (this.prototype.props.dateTime) {
       //TODO : Criar uma exception personalizada para isso
       throw new Error(
-        'Not possible to create a match schedule as TBD if it already has a date and time.',
+        "Not possible to create a match schedule as TBD if it already has a date and time.",
       );
     }
     return new MatchSchedule({ isTBD: true });

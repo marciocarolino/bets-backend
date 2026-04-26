@@ -1,11 +1,11 @@
-import { Prisma, SagaContext as PrismaSagaContext } from '@prisma/client';
-import type { UUID } from 'crypto';
+import { Prisma, SagaContext as PrismaSagaContext } from "@prisma/client";
+import type { UUID } from "crypto";
 
 import {
   SagaContext as SagaContextEntity,
   SagaContextStatus,
-} from '../../application/saga/saga-context/saga-context.entity';
-import { Identification } from '../../domain/base';
+} from "../../application/saga/saga-context/saga-context.entity";
+import { Identification } from "../../domain/base";
 
 export class PrismaSagaContextMapper {
   static toDomain(data: PrismaSagaContext): SagaContextEntity {
