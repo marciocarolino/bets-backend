@@ -1,8 +1,8 @@
-import { IRepository } from '../../../domain/repositories/base.repository';
+import { IRepository } from "../../../domain/repositories/base.repository";
 import {
   SagaContext,
   SagaContextStatus,
-} from '../saga-context/saga-context.entity';
+} from "../saga-context/saga-context.entity";
 
 export interface Criteria {
   sagaName?: string;

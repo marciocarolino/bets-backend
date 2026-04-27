@@ -1,30 +1,30 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { CreateUserDTO } from '../../../application/dto/user/create-user.dto';
-import { FindUserEmailDTO } from '../../../application/dto/user/find-user-email.dto';
-import { CreateUserMapper } from '../../../application/mapper/user/create-user.mapper';
-import { FindUserEmailDataMapper } from '../../../application/mapper/user/find-user-email.mapper';
-import { UserMapper } from '../../../application/mapper/user/user.mapper';
-import { UserService } from '../../../application/services/user/user.service';
-import { UserResponse } from '../../../response/user/user-response.dto';
+import { CreateUserDTO } from "../../../application/dto/user/create-user.dto";
+import { FindUserEmailDTO } from "../../../application/dto/user/find-user-email.dto";
+import { CreateUserMapper } from "../../../application/mapper/user/create-user.mapper";
+import { FindUserEmailDataMapper } from "../../../application/mapper/user/find-user-email.mapper";
+import { UserMapper } from "../../../application/mapper/user/user.mapper";
+import { UserService } from "../../../application/services/user/user.service";
+import { UserResponse } from "../../../response/user/user-response.dto";
 
-@ApiTags('User')
-@Controller('user')
+@ApiTags("User")
+@Controller("user")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiResponse({ status: 200, description: 'user found successfully' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 200, description: "user found successfully" })
+  @ApiResponse({ status: 404, description: "User not found" })
   async findUserActived(): Promise<UserResponse[]> {
     const resultt = await this.userService.findAll();
     return UserMapper.toUserResponseList(resultt);
   }
 
-  @Get('/:email')
-  @ApiResponse({ status: 200, description: 'user found successfully' })
-  @ApiResponse({ status: 404, description: 'User not found' })
+  @Get("/:email")
+  @ApiResponse({ status: 200, description: "user found successfully" })
+  @ApiResponse({ status: 404, description: "User not found" })
   async listUser(@Param() email: FindUserEmailDTO): Promise<UserResponse> {
     const emailInput = FindUserEmailDataMapper.toInput(email);
 
@@ -33,9 +33,9 @@ export class UserController {
     return UserMapper.toUserResponse(findEmail);
   }
 
-  @Post('/create-user')
-  @ApiResponse({ status: 201, description: 'User created successfully ' })
-  @ApiResponse({ status: 409, description: 'User already registered ' })
+  @Post("/create-user")
+  @ApiResponse({ status: 201, description: "User created successfully " })
+  @ApiResponse({ status: 409, description: "User already registered " })
   async createUser(@Body() user: CreateUserDTO): Promise<UserResponse> {
     /*Converter o DTO para o input
     fazendo com que a service não receba DTO/Swagger nem Validate

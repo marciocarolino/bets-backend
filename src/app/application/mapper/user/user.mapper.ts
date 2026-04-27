@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../domain/entities/user/user.entity';
+import { UserEntity } from "../../../domain/entities/user/user.entity";
 
 export class UserMapper {
   static toUserResponse(users: UserEntity) {

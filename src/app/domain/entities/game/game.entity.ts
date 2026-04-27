@@ -1,12 +1,12 @@
-import { AggregateRoot, Identification } from '../../base';
-import { MatchSchedule } from '../../value_objects/matchSchedule.vo';
+import { AggregateRoot, Identification } from "../../base";
+import { MatchSchedule } from "../../value_objects/matchSchedule.vo";
 
 export enum GameStatus {
-  SCHEDULED = 'SCHEDULED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  SUSPENDED = 'SUSPENDED',
-  FINISHED = 'FINISHED',
-  UNDEFINED = 'UNDEFINED',
+  SCHEDULED = "SCHEDULED",
+  IN_PROGRESS = "IN_PROGRESS",
+  SUSPENDED = "SUSPENDED",
+  FINISHED = "FINISHED",
+  UNDEFINED = "UNDEFINED",
 }
 
 export class Game extends AggregateRoot {
@@ -48,7 +48,7 @@ export class Game extends AggregateRoot {
   public finish(): void {
     if (this._status === GameStatus.FINISHED) {
       //TODO : Criar uma exception personalizada para isso
-      throw new Error('Game is already finished.');
+      throw new Error("Game is already finished.");
     }
     this._status = GameStatus.FINISHED;
     this.markAsUpdated();
@@ -57,7 +57,7 @@ export class Game extends AggregateRoot {
   public updateSchedule(newSchedule: MatchSchedule): void {
     if (this._status === GameStatus.FINISHED) {
       //TODO : Criar uma exception personalizada para isso
-      throw new Error('Cannot update schedule of a finished game.');
+      throw new Error("Cannot update schedule of a finished game.");
     }
     this._schedule = newSchedule;
     this.markAsUpdated();

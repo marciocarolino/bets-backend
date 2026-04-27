@@ -18,8 +18,8 @@ export class UserEntity {
   }
 
   changeEmail(newEmail: string) {
-    if (!newEmail.includes('@')) {
-      throw new Error('Invalid email');
+    if (!newEmail.includes("@")) {
+      throw new Error("Invalid email");
     }
     this.email = newEmail;
   }

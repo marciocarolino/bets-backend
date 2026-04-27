@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from "@nestjs/common";
 
-import { Competition } from '../../../domain/entities/competition/competition.entity';
-import { DomainEvent } from '../../../domain/repositories/base.repository';
-import type { ICompetitionRepository } from '../../../domain/repositories/competition/competition.repository';
-import { COMPETITION_REPOSITORY } from '../../../domain/repositories/competition/competition.repository';
-import { Usecase } from '../base.usecase';
+import { Competition } from "../../../domain/entities/competition/competition.entity";
+import { DomainEvent } from "../../../domain/repositories/base.repository";
+import type { ICompetitionRepository } from "../../../domain/repositories/competition/competition.repository";
+import { COMPETITION_REPOSITORY } from "../../../domain/repositories/competition/competition.repository";
+import { Usecase } from "../base.usecase";
 
 export interface Input {
   name: string;
@@ -40,8 +40,8 @@ export class CompetitionCreateUsecase implements Usecase<Input, Output> {
 
     //TODO: Criar os evento dentro do agregado
     const event: DomainEvent = {
-      eventType: 'competition.created',
-      aggregateType: 'Competition',
+      eventType: "competition.created",
+      aggregateType: "Competition",
       aggregateId: competition.identification.id,
       payload: {
         name: competition.name,
