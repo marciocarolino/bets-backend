@@ -1,17 +1,17 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from "@nestjs/common";
 
-import { UserEntity } from '../../../domain/entities/user/user.entity';
-import type { IUserRepository } from '../../../domain/repositories/user/IUser-repository';
-import { USER_REPOSITORY } from '../../../domain/repositories/user/user-repository.token';
-import { ExceptionUtils } from '../../../utils/exception.utils';
-import { HashPassword } from '../../../utils/hashPassword.utils';
-import { CreateUserDataMapper } from '../../mapper/user/data/create-user-data.mapper';
-import { FindUserDataMapper } from '../../mapper/user/data/find-user-data.mapper';
-import { CreateUserInput } from '../../users/dto-or-input/create-user.input';
-import { UserEmailInput } from '../../users/dto-or-input/user-email-input';
-import { UpdateUserInput } from '../../users/dto-or-input/update-user.input';
-import { UpdateUserDataMapper } from '../../mapper/user/data/update-user-data.mapper';
-import { comparePassword } from '../../../utils/comparePassword.util';
+import { UserEntity } from "../../../domain/entities/user/user.entity";
+import type { IUserRepository } from "../../../domain/repositories/user/IUser-repository";
+import { USER_REPOSITORY } from "../../../domain/repositories/user/user-repository.token";
+import { comparePassword } from "../../../utils/comparePassword.util";
+import { ExceptionUtils } from "../../../utils/exception.utils";
+import { HashPassword } from "../../../utils/hashPassword.utils";
+import { CreateUserDataMapper } from "../../mapper/user/data/create-user-data.mapper";
+import { FindUserDataMapper } from "../../mapper/user/data/find-user-data.mapper";
+import { UpdateUserDataMapper } from "../../mapper/user/data/update-user-data.mapper";
+import { CreateUserInput } from "../../users/dto-or-input/create-user.input";
+import { UpdateUserInput } from "../../users/dto-or-input/update-user.input";
+import { UserEmailInput } from "../../users/dto-or-input/user-email-input";
 
 @Injectable()
 export class UserService {
@@ -30,7 +30,7 @@ export class UserService {
     const findEmail = await this.userRepository.findByEmail(newEmail);
 
     if (!findEmail) {
-      throw new ExceptionUtils('User Not Found!', HttpStatus.NOT_FOUND);
+      throw new ExceptionUtils("User Not Found!", HttpStatus.NOT_FOUND);
     }
 
     return findEmail;
@@ -42,7 +42,7 @@ export class UserService {
     const verifyEmail = await this.userRepository.findByEmail(newEmail);
 
     if (verifyEmail) {
-      throw new ExceptionUtils('User already registered!', HttpStatus.CONFLICT);
+      throw new ExceptionUtils("User already registered!", HttpStatus.CONFLICT);
     }
 
     const hashedPassword = await HashPassword(user.password);
@@ -52,39 +52,35 @@ export class UserService {
     return this.userRepository.create(data);
   }
 
-  async update(user: UpdateUserInput):Promise<UserEntity>{
+  async update(user: UpdateUserInput): Promise<UserEntity> {
     //validar email
-   const validateEmail = UpdateUserDataMapper.toDomainData(user);
+    const validateEmail = UpdateUserDataMapper.toDomainData(user);
 
-   const existingUser  = await this.userRepository.findByEmail(validateEmail);
+    const existingUser = await this.userRepository.findByEmail(validateEmail);
 
-   if(!existingUser ){
-    throw new ExceptionUtils('Email not Found!', HttpStatus.NOT_FOUND);
-   }
+    if (!existingUser) {
+      throw new ExceptionUtils("Email not Found!", HttpStatus.NOT_FOUND);
+    }
 
-   let hashedPassword: string | undefined;
+    let hashedPassword: string | undefined;
 
-   if(user.password){
+    if (user.password) {
+      const isSamePassword = await comparePassword(
+        user.password,
+        existingUser.password,
+      );
 
-    const isSamePassword = await comparePassword(
-      user.password,
-      existingUser.password
-    )
+      if (!isSamePassword) {
+        hashedPassword = await HashPassword(user.password);
+      }
+    }
 
-    if(!isSamePassword){    
-    hashedPassword = await HashPassword(user.password);
-    } 
+    existingUser.update({
+      name: user.name,
+      email: user.email,
+      password: hashedPassword,
+    });
+
+    return this.userRepository.update(existingUser);
   }
-
-   existingUser.update({
-    name: user.name,
-    email: user.email,
-    password: hashedPassword 
-   });
-
-   return this.userRepository.update(existingUser);
-
-
-  }
-
 }

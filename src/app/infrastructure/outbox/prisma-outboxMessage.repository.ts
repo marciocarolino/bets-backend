@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { PrismaService } from '../../../../prisma/prisma.service';
-import { PrismaOutboxMessageMapper } from '../mapper/prisma-outboxMessageMapper';
-import type { IOutboxMessageRepository } from './outbox.repository';
-import { OutboxCriteria } from './outbox.repository';
-import { OutboxMessage } from './outbox-message/outbox-message.entity';
+import { PrismaService } from "../../../../prisma/prisma.service";
+import { PrismaOutboxMessageMapper } from "../mapper/prisma-outboxMessageMapper";
+import type { IOutboxMessageRepository } from "./outbox.repository";
+import { OutboxCriteria } from "./outbox.repository";
+import { OutboxMessage } from "./outbox-message/outbox-message.entity";
 
 @Injectable()
 export class PrismaOutboxMessageRepository implements IOutboxMessageRepository {
@@ -17,7 +17,7 @@ export class PrismaOutboxMessageRepository implements IOutboxMessageRepository {
         aggregateType: criteria?.aggregateType,
         aggregateId: criteria?.aggregateId,
       },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
     });
     return rows.map((row) => PrismaOutboxMessageMapper.toDomain(row));
   }

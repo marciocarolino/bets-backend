@@ -1,4 +1,4 @@
-import { ValueObject } from '../base';
+import { ValueObject } from "../base";
 
 interface TeamNameProps {
   name: string;
@@ -13,11 +13,11 @@ export class TeamName extends ValueObject<TeamNameProps> {
   public static create(name: string, alias: string): TeamName {
     if (!name || name.trim().length === 0) {
       //TODO : Criar uma exception personalizada para isso
-      throw new Error('Team name cannot be empty.');
+      throw new Error("Team name cannot be empty.");
     }
     if (!alias || alias.trim().length === 0) {
       //TODO : Criar uma exception personalizada para isso
-      throw new Error('Team alias cannot be empty.');
+      throw new Error("Team alias cannot be empty.");
     }
     return new TeamName({ name: name.trim(), alias: alias.trim() });
   }

@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { PrismaService } from '../../../../prisma/prisma.service';
-import { Game } from '../../domain/entities/game/game.entity';
+import { PrismaService } from "../../../../prisma/prisma.service";
+import { Game } from "../../domain/entities/game/game.entity";
 import {
   GameCriteria,
   IGameRepository,
-} from '../../domain/repositories/game/game.repository';
-import { PrismaGameMapper } from '../mapper/prisma-gameMapper';
+} from "../../domain/repositories/game/game.repository";
+import { PrismaGameMapper } from "../mapper/prisma-gameMapper";
 
 @Injectable()
 export class PrismaGameRepository implements IGameRepository {

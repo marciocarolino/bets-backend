@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 
-import { PrismaService } from '../../../../prisma/prisma.service';
-import { UserEntity } from '../../domain/entities/user/user.entity';
-import { CreateUserData } from '../../domain/repositories/user/Icreate-user.data';
-import { IFindUserEmailData } from '../../domain/repositories/user/Ifind-user-email.data';
-import { IUserRepository } from '../../domain/repositories/user/IUser-repository';
-import { PrismaUserMapper } from '../mapper/prisma-userMapper';
+import { PrismaService } from "../../../../prisma/prisma.service";
+import { UserEntity } from "../../domain/entities/user/user.entity";
+import { CreateUserData } from "../../domain/repositories/user/Icreate-user.data";
+import { IFindUserEmailData } from "../../domain/repositories/user/Ifind-user-email.data";
+import { IUserRepository } from "../../domain/repositories/user/IUser-repository";
+import { PrismaUserMapper } from "../mapper/prisma-userMapper";
 
 @Injectable()
 export class PrismaUserRepository implements IUserRepository {
@@ -39,7 +39,7 @@ export class PrismaUserRepository implements IUserRepository {
     return PrismaUserMapper.toDomain(saveUser);
   }
 
-  async update(user: UserEntity):Promise<UserEntity>{
+  async update(user: UserEntity): Promise<UserEntity> {
     const updatedUser = await this.prisma.user.update({
       where: { id: user.id },
       data: {
@@ -47,8 +47,8 @@ export class PrismaUserRepository implements IUserRepository {
         name: user.name,
         password: user.password,
         active: user.active,
-        updatedAt: user.updatedAt
-      }
+        updatedAt: user.updatedAt,
+      },
     });
     return PrismaUserMapper.toDomain(updatedUser);
   }

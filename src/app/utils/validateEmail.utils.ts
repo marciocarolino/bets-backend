@@ -1,6 +1,6 @@
-import { HttpStatus } from '@nestjs/common';
+import { HttpStatus } from "@nestjs/common";
 
-import { ExceptionUtils } from './exception.utils';
+import { ExceptionUtils } from "./exception.utils";
 
 export function isEmailValid(email: string) {
   const emailRegex =
@@ -9,7 +9,7 @@ export function isEmailValid(email: string) {
   emailRegex.test(email);
 
   if (!emailRegex) {
-    throw new ExceptionUtils('E-mail is mandatory!', HttpStatus.NOT_FOUND);
+    throw new ExceptionUtils("E-mail is mandatory!", HttpStatus.NOT_FOUND);
   }
 
   return true;
