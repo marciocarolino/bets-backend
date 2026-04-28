@@ -52,7 +52,7 @@ export class UserService {
     return this.userRepository.create(data);
   }
 
-  async update(user: UpdateUserInput): Promise<UserEntity> {
+  async updateUser(user: UpdateUserInput): Promise<UserEntity> {
     //validar email
     const validateEmail = UpdateUserDataMapper.toDomainData(user);
 
@@ -81,6 +81,6 @@ export class UserService {
       password: hashedPassword,
     });
 
-    return this.userRepository.update(existingUser);
+    return this.userRepository.updateUser(existingUser);
   }
 }

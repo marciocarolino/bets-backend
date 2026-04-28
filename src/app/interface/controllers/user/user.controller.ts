@@ -54,7 +54,7 @@ export class UserController {
   async updateUser(@Body() user: UpdateUserDTO): Promise<UserUpdateResponse> {
     const userUpdateInput = UpdateUserDataMapper.toInput(user);
 
-    const update = await this.userService.update(userUpdateInput);
+    const update = await this.userService.updateUser(userUpdateInput);
 
     return UserMapper.toUpdateUserResponse(update);
   }
