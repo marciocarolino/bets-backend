@@ -8,4 +8,6 @@ export interface IUserRepository {
   findByEmail(email: IFindUserEmailData): Promise<UserEntity | null>;
 
   create(user: CreateUserData): Promise<UserEntity>;
+
+  updateUser(user: UserEntity): Promise<UserEntity>;
 }

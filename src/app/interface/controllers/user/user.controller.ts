@@ -1,13 +1,16 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Patch, Post } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
 import { CreateUserDTO } from "../../../application/dto/user/create-user.dto";
-import { FindUserEmailDTO } from "../../../application/dto/user/find-user-email.dto";
+import { UpdateUserDTO } from "../../../application/dto/user/update-user.dto";
+import { UserEmailDTO } from "../../../application/dto/user/user-email.dto";
 import { CreateUserMapper } from "../../../application/mapper/user/create-user.mapper";
-import { FindUserEmailDataMapper } from "../../../application/mapper/user/find-user-email.mapper";
+import { UpdateUserDataMapper } from "../../../application/mapper/user/update-user-.mapper";
 import { UserMapper } from "../../../application/mapper/user/user.mapper";
+import { UserEmailDataMapper } from "../../../application/mapper/user/user-email.mapper";
 import { UserService } from "../../../application/services/user/user.service";
 import { UserResponse } from "../../../response/user/user-response.dto";
+import { UserUpdateResponse } from "../../../response/user/user-update-response.dto";
 
 @ApiTags("User")
 @Controller("user")
@@ -25,8 +28,8 @@ export class UserController {
   @Get("/:email")
   @ApiResponse({ status: 200, description: "user found successfully" })
   @ApiResponse({ status: 404, description: "User not found" })
-  async listUser(@Param() email: FindUserEmailDTO): Promise<UserResponse> {
-    const emailInput = FindUserEmailDataMapper.toInput(email);
+  async listUser(@Param() email: UserEmailDTO): Promise<UserResponse> {
+    const emailInput = UserEmailDataMapper.toInput(email);
 
     const findEmail = await this.userService.findByEmail(emailInput);
 
@@ -46,11 +49,15 @@ export class UserController {
     return UserMapper.toUserResponse(saveUser);
   }
 
-  // @Patch('/update-user')
-  // @ApiResponse({ status: 201, description: 'User updated successfully ' })
-  // async updateUser(@Body() user: UpdateUserDTO): Promise<UpdateUserDTO> {
-  //   return this.userService.updateUser(user);
-  // }
+  @Patch("/:id")
+  @ApiResponse({ status: 201, description: "User updated successfully " })
+  async updateUser(@Body() user: UpdateUserDTO): Promise<UserUpdateResponse> {
+    const userUpdateInput = UpdateUserDataMapper.toInput(user);
+
+    const update = await this.userService.updateUser(userUpdateInput);
+
+    return UserMapper.toUpdateUserResponse(update);
+  }
 
   // @Delete('/delete-user')
   // @ApiResponse({ status: 200, description: 'User deleted successfully ' })
