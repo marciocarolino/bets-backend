@@ -49,7 +49,7 @@ export class UserController {
     return UserMapper.toUserResponse(saveUser);
   }
 
-  @Patch("/update-user")
+  @Patch("/:id")
   @ApiResponse({ status: 201, description: "User updated successfully " })
   async updateUser(@Body() user: UpdateUserDTO): Promise<UserUpdateResponse> {
     const userUpdateInput = UpdateUserDataMapper.toInput(user);
