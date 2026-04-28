@@ -1,5 +1,5 @@
-export class UserUpdateResponse{
-    name!: string;
-    email!: string;
-    updatedAt!: Date;
+export class UserUpdateResponse {
+  name!: string;
+  email!: string;
+  updatedAt!: Date;
 }

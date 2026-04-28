@@ -21,12 +21,12 @@ export class UserMapper {
     return result;
   }
 
-  static toUpdateUserResponse(users: UserEntity){
+  static toUpdateUserResponse(users: UserEntity) {
     return {
       email: users.email,
       name: users.name,
       active: users.active,
-      updatedAt: users.updatedAt
-    }
+      updatedAt: users.updatedAt,
+    };
   }
 }

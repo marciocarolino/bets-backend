@@ -24,25 +24,19 @@ export class UserEntity {
     this.email = newEmail;
   }
 
-  update(data: {
-    name?: string,
-    email?: string,
-    password?: string
-  }){
-    if(data.name && data.name !== this.name){
+  update(data: { name?: string; email?: string; password?: string }) {
+    if (data.name && data.name !== this.name) {
       this.name = data.name;
     }
 
-    if( data.email && data.email !== this.email){
+    if (data.email && data.email !== this.email) {
       this.email = data.email;
     }
 
-    if(data.password){
+    if (data.password) {
       this.password = data.password;
     }
 
     this.updatedAt = new Date();
   }
-
-
 }

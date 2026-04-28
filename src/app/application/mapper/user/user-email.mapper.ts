@@ -1,5 +1,5 @@
-import { UserEmailDTO } from '../../dto/user/user-email.dto';
-import { UserEmailInput } from '../../users/dto-or-input/user-email-input';
+import { UserEmailDTO } from "../../dto/user/user-email.dto";
+import { UserEmailInput } from "../../users/dto-or-input/user-email-input";
 
 export class UserEmailDataMapper {
   static toInput(dto: UserEmailDTO): UserEmailInput {
