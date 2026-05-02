@@ -8,8 +8,8 @@ import {
 import { ConfigService } from "@nestjs/config";
 import { Client } from "pg";
 
-import type { EventPublisher } from "../../application/events/event-publisher.interface";
-import { EVENT_PUBLISHER } from "../../application/events/event-publisher.interface";
+import type { EventPublisher } from "../../application/publisher/publisher.interface";
+import { EVENT_PUBLISHER } from "../../application/publisher/publisher.interface";
 import {
   type IOutboxMessageRepository,
   OUTBOX_MESSAGE_REPOSITORY,
@@ -94,7 +94,14 @@ export class OutboxWorker implements OnModuleInit, OnModuleDestroy {
     }
 
     try {
-      await this.publisher.publish(message);
+      await this.publisher.publish({
+        correlationId: message.aggregateId,
+        eventName: `evt.${message.aggregateType.toLowerCase()}`,
+        eventType: message.eventType,
+        aggregateType: message.aggregateType,
+        aggregateId: message.aggregateId,
+        payload: message.payload,
+      });
       message.markProcessed();
       await this.outboxRepo.save(message);
     } catch (error) {

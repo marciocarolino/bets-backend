@@ -1,6 +1,8 @@
 import { Entity } from "../base";
 
 export interface DomainEvent {
+  readonly correlationId: string;
+  readonly eventName: string;
   readonly eventType: string;
   readonly aggregateType: string;
   readonly aggregateId: string;
@@ -12,7 +14,6 @@ export interface IRepository<T extends Entity, ID = string> {
   // the entities. For example, you can create a GameCriteria interface that has properties
   // like teamAId, teamBId, status, etc. Then, you can use this criteria to implement the findBy
   // method in the GameRepository.
-  findBy(criteria?: any): Promise<T[]>;
 
   retrieve(id: ID): Promise<T | null>;
 

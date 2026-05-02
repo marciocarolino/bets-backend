@@ -1,4 +1,5 @@
 import { AggregateRoot, Identification } from "../../../domain/base";
+import { RawData } from "../../../domain/value_objects/rawData.vo";
 
 export enum SagaContextStatus {
   PENDING = "PENDING",
@@ -10,9 +11,9 @@ export enum SagaContextStatus {
 }
 
 export interface SagaContextProps {
+  correlationId: string;
   sagaName: string;
   externalId?: string;
-  rawDataHash: string;
   status: SagaContextStatus;
   currentStep: number;
   rawData: Record<string, unknown>;
@@ -24,12 +25,12 @@ export interface SagaContextProps {
 }
 
 export class SagaContext extends AggregateRoot {
+  private readonly correlationId: string;
   private _sagaName: string;
   private _externalId: string | null;
-  private _rawDataHash: string;
   private _status: SagaContextStatus;
   private _currentStep: number;
-  private readonly _rawData: Readonly<Record<string, unknown>>;
+  private readonly _rawData: Readonly<RawData>;
   private _processData: Record<string, unknown>;
   private _logs: string[];
   private _error: string | null;
@@ -43,12 +44,12 @@ export class SagaContext extends AggregateRoot {
     updatedAt: Date,
   ) {
     super(identification, createdAt, updatedAt);
+    this.correlationId = props.correlationId;
     this._sagaName = props.sagaName;
     this._externalId = props.externalId ?? null;
-    this._rawDataHash = props.rawDataHash;
     this._status = props.status;
     this._currentStep = props.currentStep;
-    this._rawData = Object.freeze({ ...props.rawData });
+    this._rawData = Object.freeze(new RawData(props.rawData));
     this._processData = { ...props.processData };
     this._logs = [...props.logs];
     this._error = props.error;
@@ -62,7 +63,7 @@ export class SagaContext extends AggregateRoot {
     return this._externalId;
   }
   get rawDataHash(): string {
-    return this._rawDataHash;
+    return this._rawData.hashCode;
   }
   get status(): SagaContextStatus {
     return this._status;
@@ -71,7 +72,7 @@ export class SagaContext extends AggregateRoot {
     return this._currentStep;
   }
   get rawData(): Readonly<Record<string, unknown>> {
-    return this._rawData;
+    return this._rawData.value;
   }
   get processData(): Record<string, unknown> {
     return { ...this._processData };
@@ -87,6 +88,10 @@ export class SagaContext extends AggregateRoot {
   }
   get version(): number {
     return this._version;
+  }
+
+  get correlationIdValue(): string {
+    return this.correlationId;
   }
 
   public markRunning(): void {
@@ -158,18 +163,23 @@ export class SagaContext extends AggregateRoot {
     this.markAsUpdated();
   }
 
+  public static createRawDataSnapshot(
+    rawData: Record<string, unknown>,
+  ): RawData {
+    return new RawData(rawData);
+  }
+
   public static create(
     sagaName: string,
     rawData: Record<string, unknown>,
-    rawDataHash: string,
     externalId?: string,
   ): SagaContext {
     return new SagaContext(
       new Identification(),
       {
+        correlationId: crypto.randomUUID(),
         sagaName,
         externalId,
-        rawDataHash,
         status: SagaContextStatus.PENDING,
         currentStep: 0,
         rawData,

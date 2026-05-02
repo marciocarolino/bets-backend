@@ -12,9 +12,9 @@ export class PrismaSagaContextMapper {
     return new SagaContextEntity(
       new Identification(data.id as UUID),
       {
+        correlationId: data.correlationId,
         sagaName: data.sagaName,
         externalId: data.externalId ?? undefined,
-        rawDataHash: data.rawDataHash,
         status: data.status as unknown as SagaContextStatus,
         currentStep: data.currentStep,
         rawData: data.rawData as Record<string, unknown>,
@@ -34,6 +34,7 @@ export class PrismaSagaContextMapper {
   ): Prisma.SagaContextUncheckedCreateInput {
     return {
       id: entity.identification.id,
+      correlationId: entity.correlationIdValue,
       sagaName: entity.sagaName,
       externalId: entity.externalId,
       rawDataHash: entity.rawDataHash,

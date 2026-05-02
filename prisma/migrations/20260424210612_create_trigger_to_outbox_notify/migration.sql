@@ -7,7 +7,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Create trigger that calls the function after an insert on the OutboxMessage table
+-- Create trigger that calls the function after an insert on the outbox_messages table
 CREATE TRIGGER outbox_trigger
-AFTER INSERT ON "OutboxMessage"
+AFTER INSERT ON "outbox_messages"
 FOR EACH ROW EXECUTE PROCEDURE notify_new_outbox_message();

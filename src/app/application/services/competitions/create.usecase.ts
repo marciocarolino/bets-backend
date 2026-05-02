@@ -40,6 +40,8 @@ export class CompetitionCreateUsecase implements Usecase<Input, Output> {
 
     //TODO: Criar os evento dentro do agregado
     const event: DomainEvent = {
+      correlationId: competition.identification.id,
+      eventName: "evt.competition",
       eventType: "competition.created",
       aggregateType: "Competition",
       aggregateId: competition.identification.id,
