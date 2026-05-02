@@ -8,9 +8,9 @@ import {
 } from "@nestjs/common";
 import { ApiResponse, ApiTags } from "@nestjs/swagger";
 
+import { IngestRequestDto } from "../../../application/dto/ingest/create-game-ingest.dto";
 import { IngestSagaStartUsecase } from "../../../application/services/saga/ingest/ingest.usecase";
 import { SagaContextDuplicateException } from "../../../utils/exception.utils";
-import { IngestRequestDto } from "./dto/ingest-request.dto";
 
 @ApiTags("Ingest")
 @Controller("ingest")

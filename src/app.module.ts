@@ -7,10 +7,14 @@ import {
   COMMAND_PUBLISHER,
   EVENT_PUBLISHER,
 } from "./app/application/publisher/publisher.interface";
+import { CompetitionCommandHandler } from "./app/application/saga/handlers/competition.command-handler";
 import { OrchestratorListener } from "./app/application/saga/listener/orchestrator.listener";
 import { GameImportOrchestrator } from "./app/application/saga/orchestrators/game-import.orchestrator";
 import { SAGA_CONTEXT_REPOSITORY_TOKEN } from "./app/application/saga/repository/saga-context-repository.token";
+import { CompetitionCreateUsecase } from "./app/application/services/competitions/create.usecase";
 import { IngestSagaStartUsecase } from "./app/application/services/saga/ingest/ingest.usecase";
+import { COMPETITION_REPOSITORY } from "./app/domain/repositories/competition/competition.repository";
+import { PrismaCompetitionRepository } from "./app/infrastructure/competition/prisma-competitionRepository";
 import {
   NestCommandPublisher,
   NestEventPublisher,
@@ -46,6 +50,12 @@ import { UserModule } from "./app/modules/user/user.module";
     {
       provide: EVENT_PUBLISHER,
       useClass: NestEventPublisher,
+    },
+    CompetitionCommandHandler,
+    CompetitionCreateUsecase,
+    {
+      provide: COMPETITION_REPOSITORY,
+      useClass: PrismaCompetitionRepository,
     },
   ],
 })

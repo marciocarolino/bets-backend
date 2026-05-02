@@ -22,6 +22,6 @@ import { OutboxWorker } from "../../infrastructure/works/outbox.worker";
       useClass: PrismaOutboxMessageRepository,
     },
   ],
-  exports: [OutboxWorker],
+  exports: [OutboxWorker, OUTBOX_MESSAGE_REPOSITORY],
 })
 export class OutboxModule {}

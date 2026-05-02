@@ -11,6 +11,7 @@ export interface Input {
   slug: string;
   country: string;
   season: string;
+  correlationId?: string;
 }
 
 export interface Output {
@@ -40,7 +41,7 @@ export class CompetitionCreateUsecase implements Usecase<Input, Output> {
 
     //TODO: Criar os evento dentro do agregado
     const event: DomainEvent = {
-      correlationId: competition.identification.id,
+      correlationId: input.correlationId ?? competition.identification.id,
       eventName: "evt.competition",
       eventType: "competition.created",
       aggregateType: "Competition",
