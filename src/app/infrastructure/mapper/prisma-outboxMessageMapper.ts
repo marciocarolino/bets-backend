@@ -2,10 +2,7 @@ import { OutboxMessage as PrismaOutboxMessage, Prisma } from "@prisma/client";
 import type { UUID } from "crypto";
 
 import { Identification } from "../../domain/base";
-import {
-  OutboxMessage,
-  OutboxMessageStatus,
-} from "../outbox/outbox-message/outbox-message.entity";
+import { OutboxMessage } from "../outbox/outbox-message/outbox-message.entity";
 
 export class PrismaOutboxMessageMapper {
   static toDomain(data: PrismaOutboxMessage): OutboxMessage {
@@ -15,7 +12,7 @@ export class PrismaOutboxMessageMapper {
       data.aggregateId,
       data.eventType,
       data.payload as Record<string, unknown>,
-      data.status as unknown as OutboxMessageStatus,
+      data.status,
       data.retryCount,
       data.processedAt,
       data.createdAt,

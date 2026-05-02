@@ -1,10 +1,7 @@
 import { Prisma, SagaContext as PrismaSagaContext } from "@prisma/client";
 import type { UUID } from "crypto";
 
-import {
-  SagaContext as SagaContextEntity,
-  SagaContextStatus,
-} from "../../application/saga/saga-context/saga-context.entity";
+import { SagaContext as SagaContextEntity } from "../../application/saga/saga-context/saga-context.entity";
 import { Identification } from "../../domain/base";
 
 export class PrismaSagaContextMapper {
@@ -15,7 +12,7 @@ export class PrismaSagaContextMapper {
         correlationId: data.correlationId,
         sagaName: data.sagaName,
         externalId: data.externalId ?? undefined,
-        status: data.status as unknown as SagaContextStatus,
+        status: data.status,
         currentStep: data.currentStep,
         rawData: data.rawData as Record<string, unknown>,
         processData: data.processData as Record<string, unknown>,
