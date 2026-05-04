@@ -13,7 +13,7 @@ export class PrismaOutboxMessageRepository implements IOutboxMessageRepository {
   async findBy(criteria?: OutboxCriteria): Promise<OutboxMessage[]> {
     const rows = await this.prisma.outboxMessage.findMany({
       where: {
-        status: criteria?.status,
+        status: criteria?.status as any,
         aggregateType: criteria?.aggregateType,
         aggregateId: criteria?.aggregateId,
       },
@@ -31,7 +31,7 @@ export class PrismaOutboxMessageRepository implements IOutboxMessageRepository {
     const row = await this.prisma.outboxMessage.update({
       where: { id: message.identification.id },
       data: {
-        status: message.status,
+        status: message.status as any,
         retryCount: message.retryCount,
         processedAt: message.processedAt,
       },
