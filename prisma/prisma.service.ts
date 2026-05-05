@@ -20,9 +20,13 @@ export class PrismaService
     const pool = new Pool({ connectionString });
     const adapter = new PrismaPg(pool);
 
+    // super({
+    //   adapter,
+    // } as ConstructorParameters<typeof PrismaClient>[0]);
+
     super({
       adapter,
-    } as ConstructorParameters<typeof PrismaClient>[0]);
+    } satisfies ConstructorParameters<typeof PrismaClient>[0]);
 
     this.pool = pool;
   }

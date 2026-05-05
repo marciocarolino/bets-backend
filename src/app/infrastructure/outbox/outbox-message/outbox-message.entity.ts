@@ -4,6 +4,10 @@ export enum OutboxMessageStatus {
   PENDING = "PENDING",
   PROCESSED = "PROCESSED",
   FAILED = "FAILED",
+  RUNNING = "RUNNING",
+  COMPLETED = "COMPLETED",
+  COMPENSATING = "COMPENSATING",
+  COMPENSATED = "COMPENSATED",
 }
 
 export class OutboxMessage extends Entity {

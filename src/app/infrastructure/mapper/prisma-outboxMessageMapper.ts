@@ -1,4 +1,5 @@
-import { OutboxMessage as PrismaOutboxMessage, Prisma } from "@prisma/client";
+import type { OutboxMessage as PrismaOutboxMessage } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import type { UUID } from "crypto";
 
 import { Identification } from "../../domain/base";
@@ -30,7 +31,8 @@ export class PrismaOutboxMessageMapper {
       aggregateId: entity.aggregateId,
       eventType: entity.eventType,
       payload: entity.payload as Prisma.InputJsonValue,
-      status: entity.status,
+      status:
+        entity.status as unknown as Prisma.OutboxMessageCreateInput["status"],
       retryCount: entity.retryCount,
       processedAt: entity.processedAt,
     };

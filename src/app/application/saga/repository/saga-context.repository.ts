@@ -5,6 +5,7 @@ import {
 } from "../saga-context/saga-context.entity";
 
 export interface Criteria {
+  correlationId?: string;
   sagaName?: string;
   externalId?: string;
   rawDataHash?: string;

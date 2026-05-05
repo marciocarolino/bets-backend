@@ -22,6 +22,7 @@ export class PrismaSagaContextRepository implements ISagaContextRepository {
   async findBy(criteria?: Criteria): Promise<SagaContextEntity[]> {
     const data = await this.prisma.sagaContext.findMany({
       where: {
+        correlationId: criteria?.correlationId,
         sagaName: criteria?.sagaName,
         externalId: criteria?.externalId,
         rawDataHash: criteria?.rawDataHash,
